@@ -7,8 +7,8 @@ import { Subscription, User } from "../graphql/graphq";
 
 export class SubscriptionService {
 
-    user: User;
-    subscription: Subscription;
+    user!: User;
+    subscription!: Subscription;
 
     constructor() { }
 

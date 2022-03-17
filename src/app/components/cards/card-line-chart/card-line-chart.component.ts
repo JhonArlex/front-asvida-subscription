@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from "@angular/core";
-import Chart from "chart.js";
+import * as Chart from "chart.js";
 
 @Component({
   selector: "app-card-line-chart",
@@ -10,7 +10,7 @@ export class CardLineChartComponent implements OnInit {
 
   ngOnInit() {}
   ngAfterViewInit() {
-    var config = {
+    var config: Chart.ChartConfiguration = {
       type: "line",
       data: {
         labels: [
@@ -24,14 +24,14 @@ export class CardLineChartComponent implements OnInit {
         ],
         datasets: [
           {
-            label: new Date().getFullYear(),
+            label: (new Date().getFullYear()).toString(),
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
             data: [65, 78, 66, 44, 56, 67, 75],
             fill: false,
           },
           {
-            label: new Date().getFullYear() - 1,
+            label: (new Date().getFullYear() - 1).toString(),
             fill: false,
             backgroundColor: "#fff",
             borderColor: "#fff",
@@ -77,11 +77,11 @@ export class CardLineChartComponent implements OnInit {
               gridLines: {
                 display: false,
                 borderDash: [2],
-                borderDashOffset: [2],
+                borderDashOffset: 2,
                 color: "rgba(33, 37, 41, 0.3)",
                 zeroLineColor: "rgba(0, 0, 0, 0)",
                 zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
+                zeroLineBorderDashOffset: 2,
               },
             },
           ],
@@ -98,12 +98,12 @@ export class CardLineChartComponent implements OnInit {
               },
               gridLines: {
                 borderDash: [3],
-                borderDashOffset: [3],
+                borderDashOffset: 3,
                 drawBorder: false,
                 color: "rgba(255, 255, 255, 0.15)",
                 zeroLineColor: "rgba(33, 37, 41, 0)",
                 zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
+                zeroLineBorderDashOffset: 2,
               },
             },
           ],

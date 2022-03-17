@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
+import { lastValueFrom } from 'rxjs';
 import { CreateUserGQL, Get_SubscriptionsGQL, Subscription, User } from 'src/app/core/graphql/graphq';
 import { SubscriptionService } from 'src/app/core/services/subscription.service';
 
@@ -12,8 +13,8 @@ import { SubscriptionService } from 'src/app/core/services/subscription.service'
 })
 export class SubscriptionComponent implements OnInit {
   subscriptions: Subscription[] = [];
-  subscriptionSelected: Subscription = null;
-  formSubscription: FormGroup;
+  subscriptionSelected!: Subscription;
+  formSubscription!: FormGroup;
 
   constructor(
     private getSubscriptionsGql: Get_SubscriptionsGQL,
@@ -31,7 +32,7 @@ export class SubscriptionComponent implements OnInit {
 
   async getSubscriptions() {
     try {
-      const { data } = await this.getSubscriptionsGql.fetch({ input: { state: "active" } }).toPromise();
+      const { data } = await lastValueFrom(this.getSubscriptionsGql.fetch({ input: { state: "active" } }));
       if (data.getSubscriptions.length > 0) {
         this.subscriptions = data.getSubscriptions;
       } else {
@@ -43,7 +44,7 @@ export class SubscriptionComponent implements OnInit {
 
   }
 
-  selectSubscription(event) {
+  selectSubscription(event: Subscription) {
     this.subscriptionSelected = event;
     this.subscriptionService.subscription = event;
   }
@@ -77,7 +78,7 @@ export class SubscriptionComponent implements OnInit {
     this.createUser(formValue);
   }
 
-  createUser(user) {
+  createUser(user: { name: any; typeIdentifier: any; identifier: any; expeditionPlace: any; typeLivingPlace: any; stratum: any; address: any; neighborhood: any; city: any; email: any; phone: any; authorizationFacture: any; authorizationHabeasData: any; authorizationAssistService: any; authorizationContractService: any; }) {
     this.createUserGql.mutate({
       input: {
         name: user.name,
@@ -98,13 +99,17 @@ export class SubscriptionComponent implements OnInit {
         dateSignature: new Date(),
         role: ['621bbf90fbd65b0aac28b6c7'],
       }
-    }).subscribe(res => {
-      this.toast.success('Usuario creado con éxito');
-      this.subscriptionService.user = res.data.createUser as User;
-      this.router.navigate(['/payment-gateway']);
-    }, err => {
-      console.error(err);
-      this.toast.error('Error al crear usuario');
+    }).subscribe({
+      next: (res) => {
+        this.toast.success('Usuario creado con éxito');
+        this.subscriptionService.user = res!.data!.createUser as User;
+        this.router.navigate(['/payment-gateway']);
+      },
+      error: (e) => {
+        console.error(e);
+        this.toast.error('Error al crear usuario');
+      },
+      complete: () => console.info('complete')
     });
   }
 

@@ -65,7 +65,7 @@
                                     placeholder="0000 0000 0000 0000"
                                     class="border-0 w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
                                 <span
-                                    *ngIf="!formCard.get('cardNumber').valid && (formCard.get('cardNumber').dirty || formCard.get('cardNumber').touched)"
+                                    *ngIf="!formCard.get('cardNumber')!.valid && (formCard.get('cardNumber')!.dirty || formCard.get('cardNumber')!.touched)"
                                     class="m-3 text-red-600">Número de tarjeta incorrecto</span>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                 <input type="text" formControlName="cardName" placeholder="Nombres y apellidos"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                 <span
-                                    *ngIf="!formCard.get('cardName').valid && (formCard.get('cardName').dirty || formCard.get('cardName').touched)"
+                                    *ngIf="!formCard.get('cardName')!.valid && (formCard.get('cardName')!.dirty || formCard.get('cardName')!.touched)"
                                     class="m-3 text-red-600">Nombre de tarjeta incorrecto</span>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                                     autocomplete="cc-exp" ccExp placeholder="MM/AAAA"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                 <span
-                                    *ngIf="!formCard.get('cardExpiration').valid && (formCard.get('cardExpiration').dirty || formCard.get('cardExpiration').touched)"
+                                    *ngIf="!formCard.get('cardExpiration')!.valid && (formCard.get('cardExpiration')!.dirty || formCard.get('cardExpiration')!.touched)"
                                     class="m-3 text-red-600">Fecha de expiración incorrecta</span>
 
                             </div>
@@ -109,7 +109,7 @@
                                 <input formControlName="cardCvv" type="tel" autocomplete="off" ccCvc placeholder="CVC"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                 <span
-                                    *ngIf="!formCard.get('cardCvv').valid && (formCard.get('cardCvv').dirty || formCard.get('cardCvv').touched)"
+                                    *ngIf="!formCard.get('cardCvv')!.valid && (formCard.get('cardCvv')!.dirty || formCard.get('cardCvv')!.touched)"
                                     class="m-3 text-red-600">Código de seguridad incorrecto</span>
                             </div>
                         </div>

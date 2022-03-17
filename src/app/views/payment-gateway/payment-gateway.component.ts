@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { CreditCardValidators } from 'angular-cc-library';
+import { lastValueFrom } from 'rxjs';
 import { GetTokenAcceptanceQueryGQL, PayCardGQL, PayNequiGQL } from 'src/app/core/graphql/graphq';
 import { SubscriptionService } from 'src/app/core/services/subscription.service';
 
@@ -13,14 +14,14 @@ import { SubscriptionService } from 'src/app/core/services/subscription.service'
 })
 export class PaymentGatewayComponent implements OnInit {
 
-  formNequi: FormGroup;
-  formPaymentMethod;
-  formCard: FormGroup;
-  formAutorization: FormGroup;
+  formNequi!: FormGroup;
+  formPaymentMethod!: FormGroup;
+  formCard!: FormGroup;
+  formAutorization!: FormGroup;
   paymentMethod = null;
 
   loading = false;
-  acceptanceToken: string;
+  acceptanceToken!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +49,7 @@ export class PaymentGatewayComponent implements OnInit {
       paymentMethod: ['']
     });
 
-    this.formPaymentMethod.valueChanges.subscribe(data => {
+    this.formPaymentMethod.valueChanges.subscribe((data: { paymentMethod: null; }) => {
       this.paymentMethod = data.paymentMethod;
     });
   }
@@ -90,8 +91,8 @@ export class PaymentGatewayComponent implements OnInit {
 
   getTokenAutorization() {
     this.loading = true;
-    this.getTokenAutorizationGql.fetch().toPromise().then(data => {
-      this.acceptanceToken = data.data.getTokenAcceptace.acceptance_token;
+    lastValueFrom(this.getTokenAutorizationGql.fetch()).then(data => {
+      this.acceptanceToken = data!.data.getTokenAcceptace.acceptance_token;
       this.toast.success('Token de aceptación generado');
     }).catch(err => {
       console.error(err);
@@ -110,7 +111,7 @@ export class PaymentGatewayComponent implements OnInit {
       this.loading = true;
       const value = this.formCard.value;
       const dateExpiration = value.cardExpiration.split('/');
-      this.payCardGql.mutate({
+      lastValueFrom(this.payCardGql.mutate({
         input: {
           acceptance_token: this.acceptanceToken,
           amount: parseInt(this.subscriptionService.subscription.price + '00'),
@@ -125,9 +126,9 @@ export class PaymentGatewayComponent implements OnInit {
           period: this.subscriptionService.subscription.time,
           subscription: this.subscriptionService.subscription.id
         }
-      }).toPromise().then(data => {
+      })).then(data => {
         console.log(data);
-        this.router.navigate(['/transaction', data.data.payCard.idTransaction]);
+        this.router.navigate(['/transaction', data!.data!.payCard.idTransaction]);
       }).catch(err => {
         console.error(err);
       }).finally(() => {

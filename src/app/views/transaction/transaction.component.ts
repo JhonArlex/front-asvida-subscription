@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GetUserSubscriptionsGQL, UserSubscription } from 'src/app/core/graphql/graphq';
+import { QueryRef } from 'apollo-angular';
+import { Exact, GetUserSubscriptionsGQL, GetUserSubscriptionsQuery, UserSubscription, UserSubscriptionConditions } from 'src/app/core/graphql/graphq';
 import { SubscriptionService } from 'src/app/core/services/subscription.service';
 
 @Component({
@@ -9,13 +10,25 @@ import { SubscriptionService } from 'src/app/core/services/subscription.service'
   styleUrls: ['./transaction.component.css']
 })
 export class TransactionComponent implements OnInit {
-  idTransaction: string;
-  transaction: UserSubscription;
-  paymentMethod = {
+  idTransaction!: string;
+  transaction!: UserSubscription;
+  paymentMethod: {
+    'CARD': string,
+    'NEQUI': string,
+    [key: string]: string
+  } = {
     'CARD': 'Tarjeta de credito/débito',
-    'NEQUI': 'Nequi'
+    'NEQUI': 'Nequi',
   };
-  statePay = {
+  statePay:{
+    'APPROVED': string,
+    'PENDING': string,
+    'DECLINED': string,
+    'CANCELED': string,
+    'EXPIRED': string,
+    'ERROR': string,
+    [key: string]: string
+  } = {
     'PENDING': 'Pendiente',
     'APPROVED': 'Aprobado',
     'DECLINED': 'Declinado',
@@ -24,7 +37,7 @@ export class TransactionComponent implements OnInit {
     'CANCELED': 'Cancelado'
 
   }
-  getUserQueryRef: any;
+  getUserQueryRef!: QueryRef<GetUserSubscriptionsQuery, Exact<{ input: UserSubscriptionConditions; }>>;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,7 +48,7 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      this.idTransaction = params.id;
+      this.idTransaction = params['id'];
       this.getUserTransaction();
     });
   }

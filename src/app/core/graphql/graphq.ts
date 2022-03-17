@@ -365,7 +365,7 @@ export type Transaction = {
   currency: Scalars['String'];
   customer_data?: Maybe<Scalars['String']>;
   customer_email: Scalars['String'];
-  finalized_at: Scalars['String'];
+  finalized_at?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   idTransaction: Scalars['String'];
   payment_link_id?: Maybe<Scalars['String']>;
@@ -513,7 +513,7 @@ export type GetUserSubscriptionsQueryVariables = Exact<{
 }>;
 
 
-export type GetUserSubscriptionsQuery = { __typename?: 'Query', getUserSubscriptionCondition: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, user: { __typename?: 'User', name: string }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: { __typename?: 'Transaction', finalized_at: string, id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } } };
+export type GetUserSubscriptionsQuery = { __typename?: 'Query', getUserSubscriptionCondition: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, user: { __typename?: 'User', name: string }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: { __typename?: 'Transaction', finalized_at?: string | null, id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } } };
 
 export const TransactionFragmentFragmentDoc = gql`
     fragment TransactionFragment on Transaction {
@@ -559,7 +559,7 @@ export const GetTokenAcceptanceQueryDocument = gql`
     providedIn: 'root'
   })
   export class GetTokenAcceptanceQueryGQL extends Apollo.Query<GetTokenAcceptanceQueryQuery, GetTokenAcceptanceQueryQueryVariables> {
-    document = GetTokenAcceptanceQueryDocument;
+    override document = GetTokenAcceptanceQueryDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -577,7 +577,7 @@ export const PayNequiDocument = gql`
     providedIn: 'root'
   })
   export class PayNequiGQL extends Apollo.Mutation<PayNequiMutation, PayNequiMutationVariables> {
-    document = PayNequiDocument;
+    override document = PayNequiDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -595,7 +595,7 @@ export const PayCardDocument = gql`
     providedIn: 'root'
   })
   export class PayCardGQL extends Apollo.Mutation<PayCardMutation, PayCardMutationVariables> {
-    document = PayCardDocument;
+    override document = PayCardDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -613,7 +613,7 @@ export const Get_SubscriptionsDocument = gql`
     providedIn: 'root'
   })
   export class Get_SubscriptionsGQL extends Apollo.Query<Get_SubscriptionsQuery, Get_SubscriptionsQueryVariables> {
-    document = Get_SubscriptionsDocument;
+    override document = Get_SubscriptionsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -643,7 +643,7 @@ export const CreateUserDocument = gql`
     providedIn: 'root'
   })
   export class CreateUserGQL extends Apollo.Mutation<CreateUserMutation, CreateUserMutationVariables> {
-    document = CreateUserDocument;
+    override document = CreateUserDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -674,7 +674,7 @@ ${TransactionFragmentFragmentDoc}`;
     providedIn: 'root'
   })
   export class GetUserSubscriptionsGQL extends Apollo.Query<GetUserSubscriptionsQuery, GetUserSubscriptionsQueryVariables> {
-    document = GetUserSubscriptionsDocument;
+    override document = GetUserSubscriptionsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

@@ -9,7 +9,7 @@ import { Subscription } from 'src/app/core/graphql/graphq';
 export class SubscriptionItemComponent implements OnInit {
 
   @Input('selected') selected: boolean = false;
-  @Input('subscription') subscription: Subscription;
+  @Input('subscription') subscription!: Subscription;
   @Output() checked = new EventEmitter<Subscription>();
 
   constructor() { }

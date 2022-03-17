@@ -1,4 +1,4 @@
-<div class="w-64 rounded-xl shadow-2xl p-4 mt-4" [ngClass]="selected ? 'bg-gray-700 text-white': 'white'">
+<div class="w-64 rounded-xl shadow-2xl p-4 m-4" [ngClass]="selected ? 'bg-gray-700 text-white': 'white'">
     <h2 [ngClass]="selected ? 'text-white': 'text-gray-600'" class=" text-lg py-3">{{subscription.name}}</h2>
     <p class="text-5xl font-bold py-3">{{subscription.price| currency:'COP':'symbol-narrow': '1.0'}}</p>
     <p class="text-sm mb-4">{{subscription.description}}</p>
