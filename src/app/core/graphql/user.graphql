@@ -1,0 +1,17 @@
+mutation createUser($input: UserAction!) {
+  createUser(input: $input){
+    id
+    name
+    email
+    phone
+    role{
+      name
+    }
+    token
+    description
+    createdAt
+    city
+    access_token
+    refresh_token
+  }
+}

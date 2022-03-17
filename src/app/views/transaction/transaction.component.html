@@ -1,0 +1,60 @@
+<app-index-navbar></app-index-navbar>
+<main>
+    <div class="w-full max-w-screen-xl mx-auto px-9 pt-16">
+        <h1 class="font-bold text-3xl my-4">Estado de transacción</h1>
+        <ng-container *ngIf="transaction">
+            <p *ngIf="transaction.state === 'PENDING'" class="m-4 p-4 bg-rose-600 text-white">
+                Estamos validando el pago con Wompi. Por favor espere maximo dos minutos y veremos el estado de la transacción. Como adicional, enviaremos un correo a su cuenta cuando confirmemos el estado de la transacción. Muchas gracias por su paciencia.
+            </p>
+            <p *ngIf="transaction.state === 'APPROVED'" class="m-4 p-4 bg-green-600 text-white">
+                Felicidades! Su pago fue aprobado. Ahora ya puedes gozar de tu subscripción con AS VIDA
+            </p>
+        </ng-container>
+        
+        <div class="flex flex-wrap" *ngIf="transaction">
+            <div class="w-full md:w-1/2 lg:w-1/2 flex flex-wrap justify-center">
+                <h2 class="w-full">Subscripción seleccionada</h2>
+                <app-subscription-item [selected]="true" [subscription]="transaction.subscription">
+                </app-subscription-item>
+            </div>
+            <div class="w-full md:w-1/2 lg:w-1/2 mt-4 md:mt-0 lg:mt-0">
+                <h2>Detalle de transacción</h2>
+                <div class="grid grid-cols-2 mt-4">
+                    <div class="font-bold">
+                        Id. Transacción:
+                    </div>
+                    <div>
+                        {{transaction.transaction.idTransaction}}
+                    </div>
+                    <div class="font-bold">
+                        Método de pago:
+                    </div>
+                    <div>
+                        {{paymentMethod[transaction.transaction.payment_method_type]}}
+                    </div>
+                    <div class="font-bold">
+                        Fecha:
+                    </div>
+                    <div>
+                        {{transaction.transaction.created_at | date: 'short'}}
+                    </div>
+                    <div class="font-bold">
+                        Estado:
+                    </div>
+                    <div>
+                        {{statePay[transaction.transaction.status]}}
+                    </div>
+                    <div class="font-bold">
+                        Monto:
+                    </div>
+                    <div>
+                        {{transaction.transaction.amount_in_cents.toString().slice(0, -2) | currency:'COP':'symbol-narrow': '1.0'}}
+                    </div>
+                </div>
+                <button (click)="goToPayment()" *ngIf="transaction.transaction.status === 'DECLINED'" class="bg-red-500 text-white mt-4 active:bg-red-600 disabled:opacity-75 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                    Reintentar pago
+                </button>
+            </div>
+        </div>
+    </div>
+</main>

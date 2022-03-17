@@ -1,0 +1,17 @@
+query getUserSubscriptions($input: UserSubscriptionConditions!){
+  getUserSubscriptionCondition(input: $input) {
+    id
+    user{
+      name
+    }
+    subscription{
+      ...SubscriptionFrament
+    }
+    expiration
+    state
+    transaction{
+      ...TransactionFragment
+      finalized_at
+    }   
+  }
+}

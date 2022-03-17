@@ -1,0 +1,15 @@
+fragment SubscriptionFrament on Subscription {
+  id
+  price
+  benefits
+  name
+  time
+  state
+  description
+}
+
+query get_subscriptions($input: SubscriptionConditions!){
+  getSubscriptions(input: $input){
+    ...SubscriptionFrament
+  }
+}

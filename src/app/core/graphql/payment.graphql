@@ -1,0 +1,31 @@
+fragment TransactionFragment on Transaction {
+  id
+  created_at
+  amount_in_cents
+  reference
+  customer_email
+  currency
+  payment_method_type
+  status
+  status_message
+  billing_data
+  shipping_address
+  redirect_url
+  payment_source_id
+  payment_link_id
+  customer_data
+  bill_id
+  idTransaction
+}
+
+mutation payNequi($input: NequiAction!){
+  payNequi(input: $input) {
+    ...TransactionFragment
+  }
+}
+
+mutation payCard($input: CreditCardAction!){
+  payCard(input: $input){
+    ...TransactionFragment
+  }
+}

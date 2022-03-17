@@ -1,0 +1,5 @@
+query GetTokenAcceptanceQuery{
+  getTokenAcceptace{
+    acceptance_token
+  }
+}
