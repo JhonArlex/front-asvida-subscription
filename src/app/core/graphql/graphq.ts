@@ -389,16 +389,20 @@ export type TransactionConditions = {
 export type User = {
   __typename?: 'User';
   access_token?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  dni?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
   phone: Array<Scalars['String']>;
   refresh_token?: Maybe<Scalars['String']>;
   role: Array<Role>;
+  stratum?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['String']>;
+  typeLivingPlace?: Maybe<Scalars['String']>;
 };
 
 export type UserAction = {
@@ -437,11 +441,12 @@ export type UserQueryInput = {
 
 export type UserSubscription = {
   __typename?: 'UserSubscription';
+  createdAt: Scalars['DateTime'];
   expiration: Scalars['DateTime'];
   id: Scalars['String'];
   state: Scalars['String'];
   subscription: Subscription;
-  transaction: Transaction;
+  transaction: Array<Transaction>;
   user: User;
 };
 
@@ -468,6 +473,12 @@ export type UserSubscriptionActionUpdateData = {
 };
 
 export type UserSubscriptionConditions = {
+  dni?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  limit: Scalars['Float'];
+  page: Scalars['Float'];
+  startDate?: InputMaybe<Scalars['DateTime']>;
   transaction?: InputMaybe<Scalars['String']>;
 };
 
@@ -476,21 +487,28 @@ export type GetTokenAcceptanceQueryQueryVariables = Exact<{ [key: string]: never
 
 export type GetTokenAcceptanceQueryQuery = { __typename?: 'Query', getTokenAcceptace: { __typename?: 'TokenAcceptance', acceptance_token: string } };
 
-export type TransactionFragmentFragment = { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string };
+export type LoginMutationVariables = Exact<{
+  input: LoginInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'User', id: string, access_token?: string | null, refresh_token?: string | null } };
+
+export type TransactionFragmentFragment = { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string };
 
 export type PayNequiMutationVariables = Exact<{
   input: NequiAction;
 }>;
 
 
-export type PayNequiMutation = { __typename?: 'Mutation', payNequi: { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } };
+export type PayNequiMutation = { __typename?: 'Mutation', payNequi: { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } };
 
 export type PayCardMutationVariables = Exact<{
   input: CreditCardAction;
 }>;
 
 
-export type PayCardMutation = { __typename?: 'Mutation', payCard: { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } };
+export type PayCardMutation = { __typename?: 'Mutation', payCard: { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } };
 
 export type SubscriptionFramentFragment = { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string };
 
@@ -508,32 +526,47 @@ export type CreateUserMutationVariables = Exact<{
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, token?: string | null, description?: string | null, createdAt: string, city?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> } };
 
+export type UserFragmentFragment = { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> };
+
+export type UserSubscriptionFragmentFragment = { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> };
+
 export type GetUserSubscriptionsQueryVariables = Exact<{
   input: UserSubscriptionConditions;
 }>;
 
 
-export type GetUserSubscriptionsQuery = { __typename?: 'Query', getUserSubscriptionCondition: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, user: { __typename?: 'User', name: string }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: { __typename?: 'Transaction', finalized_at?: string | null, id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } } };
+export type GetUserSubscriptionsQuery = { __typename?: 'Query', getUserSubscriptionCondition: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
 
-export const TransactionFragmentFragmentDoc = gql`
-    fragment TransactionFragment on Transaction {
+export type GetUsersSubscriptionQueryVariables = Exact<{
+  input: UserSubscriptionConditions;
+}>;
+
+
+export type GetUsersSubscriptionQuery = { __typename?: 'Query', getUserSubscriptions: Array<{ __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> }> };
+
+export type GetUserSubscriptionQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetUserSubscriptionQuery = { __typename?: 'Query', getUserSubscription: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
+
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
   id
-  created_at
-  amount_in_cents
-  reference
-  customer_email
-  currency
-  payment_method_type
-  status
-  status_message
-  billing_data
-  shipping_address
-  redirect_url
-  payment_source_id
-  payment_link_id
-  customer_data
-  bill_id
-  idTransaction
+  name
+  email
+  phone
+  role {
+    name
+  }
+  description
+  createdAt
+  city
+  address
+  dni
+  typeLivingPlace
+  stratum
 }
     `;
 export const SubscriptionFramentFragmentDoc = gql`
@@ -547,6 +580,47 @@ export const SubscriptionFramentFragmentDoc = gql`
   description
 }
     `;
+export const TransactionFragmentFragmentDoc = gql`
+    fragment TransactionFragment on Transaction {
+  id
+  created_at
+  amount_in_cents
+  reference
+  customer_email
+  currency
+  payment_method_type
+  payment_method
+  status
+  status_message
+  billing_data
+  shipping_address
+  redirect_url
+  payment_source_id
+  payment_link_id
+  customer_data
+  bill_id
+  idTransaction
+}
+    `;
+export const UserSubscriptionFragmentFragmentDoc = gql`
+    fragment UserSubscriptionFragment on UserSubscription {
+  id
+  user {
+    ...UserFragment
+  }
+  subscription {
+    ...SubscriptionFrament
+  }
+  expiration
+  state
+  transaction {
+    ...TransactionFragment
+  }
+  createdAt
+}
+    ${UserFragmentFragmentDoc}
+${SubscriptionFramentFragmentDoc}
+${TransactionFragmentFragmentDoc}`;
 export const GetTokenAcceptanceQueryDocument = gql`
     query GetTokenAcceptanceQuery {
   getTokenAcceptace {
@@ -560,6 +634,26 @@ export const GetTokenAcceptanceQueryDocument = gql`
   })
   export class GetTokenAcceptanceQueryGQL extends Apollo.Query<GetTokenAcceptanceQueryQuery, GetTokenAcceptanceQueryQueryVariables> {
     override document = GetTokenAcceptanceQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LoginDocument = gql`
+    mutation login($input: LoginInput!) {
+  login(input: $input) {
+    id
+    access_token
+    refresh_token
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
+    override document = LoginDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -652,29 +746,52 @@ export const CreateUserDocument = gql`
 export const GetUserSubscriptionsDocument = gql`
     query getUserSubscriptions($input: UserSubscriptionConditions!) {
   getUserSubscriptionCondition(input: $input) {
-    id
-    user {
-      name
-    }
-    subscription {
-      ...SubscriptionFrament
-    }
-    expiration
-    state
-    transaction {
-      ...TransactionFragment
-      finalized_at
-    }
+    ...UserSubscriptionFragment
   }
 }
-    ${SubscriptionFramentFragmentDoc}
-${TransactionFragmentFragmentDoc}`;
+    ${UserSubscriptionFragmentFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
   })
   export class GetUserSubscriptionsGQL extends Apollo.Query<GetUserSubscriptionsQuery, GetUserSubscriptionsQueryVariables> {
     override document = GetUserSubscriptionsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetUsersSubscriptionDocument = gql`
+    query getUsersSubscription($input: UserSubscriptionConditions!) {
+  getUserSubscriptions(input: $input) {
+    ...UserSubscriptionFragment
+  }
+}
+    ${UserSubscriptionFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetUsersSubscriptionGQL extends Apollo.Query<GetUsersSubscriptionQuery, GetUsersSubscriptionQueryVariables> {
+    override document = GetUsersSubscriptionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetUserSubscriptionDocument = gql`
+    query getUserSubscription($id: String!) {
+  getUserSubscription(id: $id) {
+    ...UserSubscriptionFragment
+  }
+}
+    ${UserSubscriptionFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetUserSubscriptionGQL extends Apollo.Query<GetUserSubscriptionQuery, GetUserSubscriptionQueryVariables> {
+    override document = GetUserSubscriptionDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

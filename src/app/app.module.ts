@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentsModule } from "./components/components.module";
 import { HotToastModule } from '@ngneat/hot-toast';
 import { NgxLoadingModule } from 'ngx-loading';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { NgxLoadingModule } from 'ngx-loading';
     RegisterComponent,
     IndexComponent,
     LandingComponent,
-    ProfileComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule, 
@@ -50,7 +51,9 @@ import { NgxLoadingModule } from 'ngx-loading';
     HttpClientModule,
     ComponentsModule,
     HotToastModule.forRoot({position: 'bottom-center'}),
-    NgxLoadingModule.forRoot({})
+    NgxLoadingModule.forRoot({}),
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
   ],

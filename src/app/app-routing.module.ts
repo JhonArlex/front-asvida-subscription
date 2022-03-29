@@ -30,6 +30,7 @@ const routes: Routes = [
       { path: "settings", component: SettingsComponent },
       { path: "tables", component: TablesComponent },
       { path: "maps", component: MapsComponent },
+      { path: "clients", loadChildren: () => import("./views/admin/clients/clients.module").then(m => m.ClientsModule) },
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
     ],
   },

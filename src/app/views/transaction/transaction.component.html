@@ -24,34 +24,34 @@
                         Id. Transacción:
                     </div>
                     <div>
-                        {{transaction.transaction.idTransaction}}
+                        {{transaction.transaction[0].idTransaction}}
                     </div>
                     <div class="font-bold">
                         Método de pago:
                     </div>
                     <div>
-                        {{paymentMethod[transaction.transaction.payment_method_type]}}
+                        {{paymentMethod[transaction.transaction[0].payment_method_type]}}
                     </div>
                     <div class="font-bold">
                         Fecha:
                     </div>
                     <div>
-                        {{transaction.transaction.created_at | date: 'short'}}
+                        {{transaction.transaction[0].created_at | date: 'short'}}
                     </div>
                     <div class="font-bold">
                         Estado:
                     </div>
                     <div>
-                        {{statePay[transaction.transaction.status]}}
+                        {{statePay[transaction.transaction[0].status]}}
                     </div>
                     <div class="font-bold">
                         Monto:
                     </div>
                     <div>
-                        {{transaction.transaction.amount_in_cents.toString().slice(0, -2) | currency:'COP':'symbol-narrow': '1.0'}}
+                        {{transaction.transaction[0].amount_in_cents.toString().slice(0, -2) | currency:'COP':'symbol-narrow': '1.0'}}
                     </div>
                 </div>
-                <button (click)="goToPayment()" *ngIf="transaction.transaction.status === 'DECLINED'" class="bg-red-500 text-white mt-4 active:bg-red-600 disabled:opacity-75 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                <button (click)="goToPayment()" *ngIf="transaction.transaction[0].status === 'DECLINED'" class="bg-red-500 text-white mt-4 active:bg-red-600 disabled:opacity-75 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                     Reintentar pago
                 </button>
             </div>

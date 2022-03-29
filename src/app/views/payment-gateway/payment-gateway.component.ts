@@ -64,11 +64,6 @@ export class PaymentGatewayComponent implements OnInit {
     this.formAutorization = this.fb.group({
       authorization: [false, Validators.required]
     });
-    this.formAutorization.valueChanges.subscribe(data => {
-      if (data.authorization) {
-        this.getTokenAutorization();
-      }
-    });
   }
 
   buildCardForm() {
@@ -91,18 +86,21 @@ export class PaymentGatewayComponent implements OnInit {
 
   getTokenAutorization() {
     this.loading = true;
-    lastValueFrom(this.getTokenAutorizationGql.fetch()).then(data => {
-      this.acceptanceToken = data!.data.getTokenAcceptace.acceptance_token;
-      this.toast.success('Token de aceptación generado');
-    }).catch(err => {
-      console.error(err);
-    }).finally(() => {
-      this.loading = false;
-    });
+    const value = this.formAutorization.value;
+    if (value) {
+      lastValueFrom(this.getTokenAutorizationGql.fetch({},{fetchPolicy: 'network-only'})).then(data => {
+        this.acceptanceToken = data!.data.getTokenAcceptace.acceptance_token;
+        this.toast.success('Token de aceptación generado');
+      }).catch(err => {
+        console.error(err);
+      }).finally(() => {
+        this.loading = false;
+      });
+    }
+    
   }
 
   paymentCard() {
-    console.log(this.formCard.value);
     if (!this.formAutorization.valid) {
       this.toast.error('Debes aceptar los términos y condiciones');
     }
@@ -131,6 +129,8 @@ export class PaymentGatewayComponent implements OnInit {
         this.router.navigate(['/transaction', data!.data!.payCard.idTransaction]);
       }).catch(err => {
         console.error(err);
+        this.toast.error('No se pudo realizar el pago');
+
       }).finally(() => {
         this.loading = false;
       });

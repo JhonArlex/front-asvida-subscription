@@ -6,6 +6,7 @@ fragment TransactionFragment on Transaction {
   customer_email
   currency
   payment_method_type
+  payment_method
   status
   status_message
   billing_data

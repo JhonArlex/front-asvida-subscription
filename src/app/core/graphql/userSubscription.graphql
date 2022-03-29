@@ -1,17 +1,51 @@
+fragment UserFragment on User{
+  id
+  name
+  email
+  phone
+  role{
+    name
+  }
+  description
+  createdAt
+  city
+  address
+  dni
+  typeLivingPlace
+  stratum
+}
+
+fragment UserSubscriptionFragment on UserSubscription{
+  id
+  user{
+    ...UserFragment
+  }
+  subscription{
+    ...SubscriptionFrament
+  }
+  expiration
+  state
+  transaction{
+    ...TransactionFragment
+    
+  }
+  createdAt
+}
+
 query getUserSubscriptions($input: UserSubscriptionConditions!){
   getUserSubscriptionCondition(input: $input) {
-    id
-    user{
-      name
-    }
-    subscription{
-      ...SubscriptionFrament
-    }
-    expiration
-    state
-    transaction{
-      ...TransactionFragment
-      finalized_at
-    }   
+    ...UserSubscriptionFragment
+  }
+}
+
+query getUsersSubscription($input: UserSubscriptionConditions!){
+  getUserSubscriptions(input: $input){
+    ...UserSubscriptionFragment
+  }
+}
+
+query getUserSubscription($id: String!) {
+  getUserSubscription(id: $id) {
+    ...UserSubscriptionFragment
   }
 }

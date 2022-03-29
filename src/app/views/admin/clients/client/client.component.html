@@ -1,0 +1,98 @@
+<div class="flex flex-wrap mt-4">
+    <div class="w-full mb-12 px-4">
+        <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
+            <div class="rounded-t mb-0 px-4 py-3 border-0">
+                <div class="flex flex-wrap items-center">
+                    <div class="relative w-full px-4 max-w-full flex align-middle">
+                        <button (click)="goBack()"
+                            class="bg-red-500 text-white active:bg-red-600 text-lg font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button">
+                            <i class="fas fa-angle-left"></i>
+                        </button>
+                        <h1 class="font-semibold text-lg bg-white ml-2">
+                            Información detallada
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4" *ngIf="client">
+                <h2 class="font-semibold">Cliente</h2>
+                <div class="grid grid-cols-4 sm:grid-cols-2">
+                    <div>
+                        Nombre: {{client.user.name}}
+                    </div>
+                    <div>
+                        Cédula: {{client.user.dni}}
+                    </div>
+                    <div>
+                        Ciudad: {{client.user.city}}
+                    </div>
+                    <div>
+                        Dirección: {{client.user.address}}
+                    </div>
+                    <div>
+                        Estrato: {{client.user.stratum}}
+                    </div>
+                    <div>
+                        Tipo de vivienda: {{client.user.typeLivingPlace}}
+                    </div>
+                    <div>
+                        Fecha de creación: {{client.user.createdAt | date: 'dd/MM/yyyy'}}
+                    </div>
+                </div>
+                <hr class="my-6 border-b-1 border-blueGray-300" />
+                <h2 class="font-semibold">Suscripción</h2>
+                <div class="grid grid-cols-4 sm:grid-cols-2">
+                    <div>
+                        Nombre: {{client.subscription.name}}
+                    </div>
+                    <div>
+                        Tiempo de suscripción: {{client.subscription.time}} días
+                    </div>
+                    <div>
+                        Fecha de inicio: {{client.createdAt | date: 'dd/MM/yyyy'}}
+                    </div>
+                    <div>
+                        Fecha de expiración: {{client.expiration| date: 'dd/MM/yyyy'}}
+                    </div>
+                    <div>
+                        Estado: {{client.subscription.state}}
+                    </div>
+                    <div>
+                        Precio: {{client.subscription.price}}
+                    </div>
+                </div>
+                <hr class="my-6 border-b-1 border-blueGray-300" />
+                <h2 class="font-semibold">Transacción</h2>
+                <div class="grid grid-cols-4 sm:grid-cols-2" *ngFor="let t of client.transaction">
+                    <div>
+                        Fecha: {{t.created_at| date: 'dd/MM/yyyy'}}
+                    </div>
+                    <div>
+                        Monto: {{t.amount_in_cents | currency}}
+                    </div>
+                    <div>
+                        Estado: {{t.status}}
+                    </div>
+                    <div>
+                        Descripción: {{t.status_message}}
+                    </div>
+                    <div>
+                        Referencia: {{t.reference}}
+                    </div>
+                    <div>
+                        Método de pago: {{t.payment_method_type}}
+                    </div>
+                    <div *ngIf="t.payment_method_type === 'CARD'">
+                        <div>
+                            Número de tarjeta termina en: {{payment_method.extra.last_four}}
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

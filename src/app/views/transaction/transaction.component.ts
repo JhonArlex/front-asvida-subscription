@@ -56,6 +56,8 @@ export class TransactionComponent implements OnInit {
   getUserTransaction() {
     this.getUserQueryRef = this.getUserTransactionGQL.watch({
       input: {
+        page: 1,
+        limit: 10,
         transaction: this.idTransaction
       }
     }, {
