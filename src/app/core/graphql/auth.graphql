@@ -1,7 +1,11 @@
 mutation login($input: LoginInput!){
   login(input: $input){
-    id
-    access_token
-    refresh_token
+    ...UserFragment
+  }
+}
+
+mutation refreshToken($refreshToken: String!) {
+  refresh(refresh_token: $refreshToken) {
+    ...UserFragment
   }
 }

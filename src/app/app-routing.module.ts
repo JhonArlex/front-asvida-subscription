@@ -31,6 +31,7 @@ const routes: Routes = [
       { path: "tables", component: TablesComponent },
       { path: "maps", component: MapsComponent },
       { path: "clients", loadChildren: () => import("./views/admin/clients/clients.module").then(m => m.ClientsModule) },
+      { path: "coupons", loadChildren: () => import("./views/admin/coupons/coupons.module").then(m => m.CouponsModule) },
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
     ],
   },

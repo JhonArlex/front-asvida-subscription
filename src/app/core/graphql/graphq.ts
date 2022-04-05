@@ -17,10 +17,49 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type Coupon = {
+  __typename?: 'Coupon';
+  code: Scalars['String'];
+  discount: Scalars['Float'];
+  discount_type: Scalars['String'];
+  dueDate: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  state: Scalars['String'];
+};
+
+export type CouponAction = {
+  code: Scalars['String'];
+  discount: Scalars['Float'];
+  discount_type: Scalars['String'];
+  dueDate: Scalars['String'];
+  name: Scalars['String'];
+  state: Scalars['String'];
+};
+
+export type CouponActionUpdate = {
+  data: CouponActionUpdateData;
+  id: Scalars['String'];
+};
+
+export type CouponActionUpdateData = {
+  code: Scalars['String'];
+  discount: Scalars['Float'];
+  discount_type: Scalars['String'];
+  dueDate: Scalars['String'];
+  name: Scalars['String'];
+  state: Scalars['String'];
+};
+
+export type CouponConditions = {
+  code?: InputMaybe<Scalars['String']>;
+};
+
 export type CreditCardAction = {
   acceptance_token: Scalars['String'];
   amount: Scalars['Float'];
   card_holder: Scalars['String'];
+  coupon?: InputMaybe<Scalars['String']>;
   cvc: Scalars['String'];
   email: Scalars['String'];
   exp_month: Scalars['String'];
@@ -32,6 +71,11 @@ export type CreditCardAction = {
   user: Scalars['String'];
 };
 
+export type ExcelUserSubscription = {
+  __typename?: 'ExcelUserSubscription';
+  path: Scalars['String'];
+};
+
 export type LoginInput = {
   email?: InputMaybe<Scalars['String']>;
   password: Scalars['String'];
@@ -40,16 +84,19 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCoupon: Coupon;
   createRole: Role;
   createSubscription: Subscription;
   createUser: User;
   createUserSubscription: UserSubscription;
+  deleteCoupon: Coupon;
   deletePayment: Payment;
   deletePermission: Permission;
   deleteRole: Role;
   deleteSubscription: Subscription;
   deleteUser: User;
   deleteUserSubscription: UserSubscription;
+  exportUserSubscriptionExcel: ExcelUserSubscription;
   facebookLogin: User;
   googleLogin: User;
   login: User;
@@ -58,10 +105,16 @@ export type Mutation = {
   recovery: Recovery;
   refresh: User;
   register: User;
+  updateCoupon: Coupon;
   updateRole: Role;
   updateSubscription: Subscription;
   updateUser: User;
   updateUserSubscription: UserSubscription;
+};
+
+
+export type MutationCreateCouponArgs = {
+  input: CouponAction;
 };
 
 
@@ -82,6 +135,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateUserSubscriptionArgs = {
   input: UserSubscriptionAction;
+};
+
+
+export type MutationDeleteCouponArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -112,6 +170,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationDeleteUserSubscriptionArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationExportUserSubscriptionExcelArgs = {
+  input: UserSubscriptionConditions;
 };
 
 
@@ -152,6 +215,11 @@ export type MutationRefreshArgs = {
 
 export type MutationRegisterArgs = {
   input: RegisterInput;
+};
+
+
+export type MutationUpdateCouponArgs = {
+  input: CouponActionUpdate;
 };
 
 
@@ -212,6 +280,8 @@ export type PermissionInputQuery = {
 
 export type Query = {
   __typename?: 'Query';
+  getCoupon: Coupon;
+  getCoupons: Array<Coupon>;
   getPayment: Array<Payment>;
   getPayments: Payment;
   getPermission: Array<Permission>;
@@ -226,6 +296,16 @@ export type Query = {
   getUserSubscriptionCondition: UserSubscription;
   getUserSubscriptions: Array<UserSubscription>;
   getUsers: Array<User>;
+};
+
+
+export type QueryGetCouponArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetCouponsArgs = {
+  input: CouponConditions;
 };
 
 
@@ -476,8 +556,8 @@ export type UserSubscriptionConditions = {
   dni?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   endDate?: InputMaybe<Scalars['DateTime']>;
-  limit: Scalars['Float'];
-  page: Scalars['Float'];
+  limit?: InputMaybe<Scalars['Float']>;
+  page?: InputMaybe<Scalars['Float']>;
   startDate?: InputMaybe<Scalars['DateTime']>;
   transaction?: InputMaybe<Scalars['String']>;
 };
@@ -492,7 +572,44 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'User', id: string, access_token?: string | null, refresh_token?: string | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> } };
+
+export type RefreshTokenMutationVariables = Exact<{
+  refreshToken: Scalars['String'];
+}>;
+
+
+export type RefreshTokenMutation = { __typename?: 'Mutation', refresh: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> } };
+
+export type CouponFragmentFragment = { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string };
+
+export type GetCouponsQueryVariables = Exact<{
+  input: CouponConditions;
+}>;
+
+
+export type GetCouponsQuery = { __typename?: 'Query', getCoupons: Array<{ __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string }> };
+
+export type CreateCouponMutationVariables = Exact<{
+  input: CouponAction;
+}>;
+
+
+export type CreateCouponMutation = { __typename?: 'Mutation', createCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string } };
+
+export type UpdateCouponMutationVariables = Exact<{
+  input: CouponActionUpdate;
+}>;
+
+
+export type UpdateCouponMutation = { __typename?: 'Mutation', updateCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string } };
+
+export type DeleteCouponMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteCouponMutation = { __typename?: 'Mutation', deleteCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string } };
 
 export type TransactionFragmentFragment = { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string };
 
@@ -519,38 +636,49 @@ export type Get_SubscriptionsQueryVariables = Exact<{
 
 export type Get_SubscriptionsQuery = { __typename?: 'Query', getSubscriptions: Array<{ __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }> };
 
+export type UserFragmentFragment = { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> };
+
 export type CreateUserMutationVariables = Exact<{
   input: UserAction;
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, token?: string | null, description?: string | null, createdAt: string, city?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> } };
 
-export type UserFragmentFragment = { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> };
-
-export type UserSubscriptionFragmentFragment = { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> };
+export type UserSubscriptionFragmentFragment = { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> };
 
 export type GetUserSubscriptionsQueryVariables = Exact<{
   input: UserSubscriptionConditions;
 }>;
 
 
-export type GetUserSubscriptionsQuery = { __typename?: 'Query', getUserSubscriptionCondition: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
+export type GetUserSubscriptionsQuery = { __typename?: 'Query', getUserSubscriptionCondition: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
 
 export type GetUsersSubscriptionQueryVariables = Exact<{
   input: UserSubscriptionConditions;
 }>;
 
 
-export type GetUsersSubscriptionQuery = { __typename?: 'Query', getUserSubscriptions: Array<{ __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> }> };
+export type GetUsersSubscriptionQuery = { __typename?: 'Query', getUserSubscriptions: Array<{ __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> }> };
 
 export type GetUserSubscriptionQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetUserSubscriptionQuery = { __typename?: 'Query', getUserSubscription: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
+export type GetUserSubscriptionQuery = { __typename?: 'Query', getUserSubscription: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
 
+export const CouponFragmentFragmentDoc = gql`
+    fragment CouponFragment on Coupon {
+  id
+  code
+  dueDate
+  name
+  discount
+  state
+  discount_type
+}
+    `;
 export const UserFragmentFragmentDoc = gql`
     fragment UserFragment on User {
   id
@@ -567,6 +695,8 @@ export const UserFragmentFragmentDoc = gql`
   dni
   typeLivingPlace
   stratum
+  access_token
+  refresh_token
 }
     `;
 export const SubscriptionFramentFragmentDoc = gql`
@@ -642,18 +772,106 @@ export const GetTokenAcceptanceQueryDocument = gql`
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
   login(input: $input) {
-    id
-    access_token
-    refresh_token
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
   })
   export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
     override document = LoginDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const RefreshTokenDocument = gql`
+    mutation refreshToken($refreshToken: String!) {
+  refresh(refresh_token: $refreshToken) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class RefreshTokenGQL extends Apollo.Mutation<RefreshTokenMutation, RefreshTokenMutationVariables> {
+    override document = RefreshTokenDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetCouponsDocument = gql`
+    query getCoupons($input: CouponConditions!) {
+  getCoupons(input: $input) {
+    ...CouponFragment
+  }
+}
+    ${CouponFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetCouponsGQL extends Apollo.Query<GetCouponsQuery, GetCouponsQueryVariables> {
+    override document = GetCouponsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateCouponDocument = gql`
+    mutation createCoupon($input: CouponAction!) {
+  createCoupon(input: $input) {
+    ...CouponFragment
+  }
+}
+    ${CouponFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateCouponGQL extends Apollo.Mutation<CreateCouponMutation, CreateCouponMutationVariables> {
+    override document = CreateCouponDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateCouponDocument = gql`
+    mutation updateCoupon($input: CouponActionUpdate!) {
+  updateCoupon(input: $input) {
+    ...CouponFragment
+  }
+}
+    ${CouponFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateCouponGQL extends Apollo.Mutation<UpdateCouponMutation, UpdateCouponMutationVariables> {
+    override document = UpdateCouponDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteCouponDocument = gql`
+    mutation deleteCoupon($id: String!) {
+  deleteCoupon(id: $id) {
+    ...CouponFragment
+  }
+}
+    ${CouponFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteCouponGQL extends Apollo.Mutation<DeleteCouponMutation, DeleteCouponMutationVariables> {
+    override document = DeleteCouponDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -716,22 +934,10 @@ export const Get_SubscriptionsDocument = gql`
 export const CreateUserDocument = gql`
     mutation createUser($input: UserAction!) {
   createUser(input: $input) {
-    id
-    name
-    email
-    phone
-    role {
-      name
-    }
-    token
-    description
-    createdAt
-    city
-    access_token
-    refresh_token
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'

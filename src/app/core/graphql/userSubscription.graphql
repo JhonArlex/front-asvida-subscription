@@ -1,19 +1,4 @@
-fragment UserFragment on User{
-  id
-  name
-  email
-  phone
-  role{
-    name
-  }
-  description
-  createdAt
-  city
-  address
-  dni
-  typeLivingPlace
-  stratum
-}
+
 
 fragment UserSubscriptionFragment on UserSubscription{
   id

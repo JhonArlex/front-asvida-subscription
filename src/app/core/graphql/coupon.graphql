@@ -1,0 +1,33 @@
+fragment CouponFragment on Coupon {
+  id
+  code
+  dueDate
+  name
+  discount
+  state
+  discount_type
+}
+
+query getCoupons($input: CouponConditions!) {
+  getCoupons(input: $input){
+    ...CouponFragment
+  }
+}
+
+mutation createCoupon($input: CouponAction!) {
+  createCoupon(input: $input) {
+    ...CouponFragment
+  }
+}
+
+mutation updateCoupon($input: CouponActionUpdate!) {
+  updateCoupon(input: $input){
+    ...CouponFragment
+  }
+}
+
+mutation deleteCoupon($id: String!) {
+  deleteCoupon(id: $id) {
+    ...CouponFragment
+  }
+}
