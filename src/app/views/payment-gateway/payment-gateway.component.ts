@@ -23,6 +23,11 @@ export class PaymentGatewayComponent implements OnInit {
   loading = false;
   acceptanceToken!: string;
 
+  ERRORS = {
+    'coupon_not_found': 'Cupón no encontrado',
+  }
+
+
   constructor(
     private fb: FormBuilder,
     private toast: HotToastService,
@@ -71,7 +76,8 @@ export class PaymentGatewayComponent implements OnInit {
       cardNumber: ['', [CreditCardValidators.validateCCNumber]],
       cardExpiration: ['', [CreditCardValidators.validateExpDate]],
       cardCvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
-      cardName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]]
+      cardName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      coupon: ['']
     });
   }
 
@@ -122,15 +128,19 @@ export class PaymentGatewayComponent implements OnInit {
           exp_year: dateExpiration[1].replace(' ', '').substr(2, 2),
           fee: '1',
           period: this.subscriptionService.subscription.time,
-          subscription: this.subscriptionService.subscription.id
+          subscription: this.subscriptionService.subscription.id,
+          coupon: value.coupon
         }
       })).then(data => {
         console.log(data);
         this.router.navigate(['/transaction', data!.data!.payCard.idTransaction]);
-      }).catch(err => {
-        console.error(err);
-        this.toast.error('No se pudo realizar el pago');
-
+      }).catch(({ graphQLErrors, networkError }) => {
+        console.error(graphQLErrors);
+        if (graphQLErrors) {
+          this.toast.error(this.ERRORS[graphQLErrors[0].message as keyof typeof this.ERRORS]);
+        } else {
+          this.toast.error('No se pudo realizar el pago');
+        }
       }).finally(() => {
         this.loading = false;
       });

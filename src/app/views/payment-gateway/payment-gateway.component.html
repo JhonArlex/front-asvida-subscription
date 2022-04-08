@@ -61,8 +61,8 @@
                                     htmlFor="grid-password">
                                     Número de tarjeta
                                 </label>
-                                <input formControlName="cardNumber" id="cc-number" type="tel" ccNumber #ccNumber="ccNumber"
-                                    placeholder="0000 0000 0000 0000"
+                                <input formControlName="cardNumber" id="cc-number" type="tel" ccNumber
+                                    #ccNumber="ccNumber" placeholder="0000 0000 0000 0000"
                                     class="border-0 w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
                                 <span
                                     *ngIf="!formCard.get('cardNumber')!.valid && (formCard.get('cardNumber')!.dirty || formCard.get('cardNumber')!.touched)"
@@ -113,8 +113,23 @@
                                     class="m-3 text-red-600">Código de seguridad incorrecto</span>
                             </div>
                         </div>
+                        <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+                        <div class="w-full lg:w-6/12 px-4">
+                            <div class="relative w-full mb-3">
+                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                                    htmlFor="grid-password">
+                                    Cupon de descuento
+                                </label>
+                                <!-- Validacion codigo de seguridad -->
+                                <input formControlName="coupon" type="text" autocomplete="off"
+                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+                            </div>
+                        </div>
                     </form>
                 </div>
+
+
                 <hr class="mt-6 border-b-1 border-blueGray-300" />
 
                 <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
