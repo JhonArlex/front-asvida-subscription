@@ -30,3 +30,16 @@ mutation payCard($input: CreditCardAction!){
     ...TransactionFragment
   }
 }
+
+mutation payBancolombia($input: BtnBancolombiaAction!){
+  payBtnBancolombia(input: $input){
+    ...TransactionFragment
+  }
+}
+
+query getFinancialInstution{
+  getPSEFinancialInstitution{
+    financial_institution_code
+    financial_institution_name
+  }
+}

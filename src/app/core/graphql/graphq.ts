@@ -17,12 +17,24 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type BtnBancolombiaAction = {
+  acceptance_token: Scalars['String'];
+  amount: Scalars['Float'];
+  coupon?: InputMaybe<Scalars['String']>;
+  email: Scalars['String'];
+  payment_description: Scalars['String'];
+  period: Scalars['Float'];
+  subscription: Scalars['String'];
+  user: Scalars['String'];
+  user_type: Scalars['String'];
+};
+
 export type Coupon = {
   __typename?: 'Coupon';
   code: Scalars['String'];
   discount: Scalars['Float'];
   discount_type: Scalars['String'];
-  dueDate: Scalars['String'];
+  dueDate: Scalars['DateTime'];
   id: Scalars['String'];
   name: Scalars['String'];
   state: Scalars['String'];
@@ -32,7 +44,7 @@ export type CouponAction = {
   code: Scalars['String'];
   discount: Scalars['Float'];
   discount_type: Scalars['String'];
-  dueDate: Scalars['String'];
+  dueDate: Scalars['DateTime'];
   name: Scalars['String'];
   state: Scalars['String'];
 };
@@ -46,7 +58,7 @@ export type CouponActionUpdateData = {
   code: Scalars['String'];
   discount: Scalars['Float'];
   discount_type: Scalars['String'];
-  dueDate: Scalars['String'];
+  dueDate: Scalars['DateTime'];
   name: Scalars['String'];
   state: Scalars['String'];
 };
@@ -90,7 +102,6 @@ export type Mutation = {
   createUser: User;
   createUserSubscription: UserSubscription;
   deleteCoupon: Coupon;
-  deletePayment: Payment;
   deletePermission: Permission;
   deleteRole: Role;
   deleteSubscription: Subscription;
@@ -100,6 +111,7 @@ export type Mutation = {
   facebookLogin: User;
   googleLogin: User;
   login: User;
+  payBtnBancolombia: Transaction;
   payCard: Transaction;
   payNequi: Transaction;
   recovery: Recovery;
@@ -139,11 +151,6 @@ export type MutationCreateUserSubscriptionArgs = {
 
 
 export type MutationDeleteCouponArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MutationDeletePaymentArgs = {
   id: Scalars['String'];
 };
 
@@ -190,6 +197,11 @@ export type MutationGoogleLoginArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput;
+};
+
+
+export type MutationPayBtnBancolombiaArgs = {
+  input: BtnBancolombiaAction;
 };
 
 
@@ -252,6 +264,12 @@ export type NequiAction = {
   user: Scalars['String'];
 };
 
+export type PseFinancialInstitution = {
+  __typename?: 'PSEFinancialInstitution';
+  financial_institution_code: Scalars['String'];
+  financial_institution_name: Scalars['String'];
+};
+
 export type Payment = {
   __typename?: 'Payment';
   description: Scalars['String'];
@@ -282,6 +300,7 @@ export type Query = {
   __typename?: 'Query';
   getCoupon: Coupon;
   getCoupons: Array<Coupon>;
+  getPSEFinancialInstitution: Array<PseFinancialInstitution>;
   getPayment: Array<Payment>;
   getPayments: Payment;
   getPermission: Array<Permission>;
@@ -581,35 +600,35 @@ export type RefreshTokenMutationVariables = Exact<{
 
 export type RefreshTokenMutation = { __typename?: 'Mutation', refresh: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> } };
 
-export type CouponFragmentFragment = { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string };
+export type CouponFragmentFragment = { __typename?: 'Coupon', id: string, code: string, dueDate: any, name: string, discount: number, state: string, discount_type: string };
 
 export type GetCouponsQueryVariables = Exact<{
   input: CouponConditions;
 }>;
 
 
-export type GetCouponsQuery = { __typename?: 'Query', getCoupons: Array<{ __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string }> };
+export type GetCouponsQuery = { __typename?: 'Query', getCoupons: Array<{ __typename?: 'Coupon', id: string, code: string, dueDate: any, name: string, discount: number, state: string, discount_type: string }> };
 
 export type CreateCouponMutationVariables = Exact<{
   input: CouponAction;
 }>;
 
 
-export type CreateCouponMutation = { __typename?: 'Mutation', createCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string } };
+export type CreateCouponMutation = { __typename?: 'Mutation', createCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: any, name: string, discount: number, state: string, discount_type: string } };
 
 export type UpdateCouponMutationVariables = Exact<{
   input: CouponActionUpdate;
 }>;
 
 
-export type UpdateCouponMutation = { __typename?: 'Mutation', updateCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string } };
+export type UpdateCouponMutation = { __typename?: 'Mutation', updateCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: any, name: string, discount: number, state: string, discount_type: string } };
 
 export type DeleteCouponMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type DeleteCouponMutation = { __typename?: 'Mutation', deleteCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: string, name: string, discount: number, state: string, discount_type: string } };
+export type DeleteCouponMutation = { __typename?: 'Mutation', deleteCoupon: { __typename?: 'Coupon', id: string, code: string, dueDate: any, name: string, discount: number, state: string, discount_type: string } };
 
 export type TransactionFragmentFragment = { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string };
 
@@ -626,6 +645,18 @@ export type PayCardMutationVariables = Exact<{
 
 
 export type PayCardMutation = { __typename?: 'Mutation', payCard: { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } };
+
+export type PayBancolombiaMutationVariables = Exact<{
+  input: BtnBancolombiaAction;
+}>;
+
+
+export type PayBancolombiaMutation = { __typename?: 'Mutation', payBtnBancolombia: { __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string } };
+
+export type GetFinancialInstutionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetFinancialInstutionQuery = { __typename?: 'Query', getPSEFinancialInstitution: Array<{ __typename?: 'PSEFinancialInstitution', financial_institution_code: string, financial_institution_name: string }> };
 
 export type SubscriptionFramentFragment = { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string };
 
@@ -764,7 +795,7 @@ export const GetTokenAcceptanceQueryDocument = gql`
   })
   export class GetTokenAcceptanceQueryGQL extends Apollo.Query<GetTokenAcceptanceQueryQuery, GetTokenAcceptanceQueryQueryVariables> {
     override document = GetTokenAcceptanceQueryDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -782,7 +813,7 @@ export const LoginDocument = gql`
   })
   export class LoginGQL extends Apollo.Mutation<LoginMutation, LoginMutationVariables> {
     override document = LoginDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -800,7 +831,7 @@ export const RefreshTokenDocument = gql`
   })
   export class RefreshTokenGQL extends Apollo.Mutation<RefreshTokenMutation, RefreshTokenMutationVariables> {
     override document = RefreshTokenDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -818,7 +849,7 @@ export const GetCouponsDocument = gql`
   })
   export class GetCouponsGQL extends Apollo.Query<GetCouponsQuery, GetCouponsQueryVariables> {
     override document = GetCouponsDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -836,7 +867,7 @@ export const CreateCouponDocument = gql`
   })
   export class CreateCouponGQL extends Apollo.Mutation<CreateCouponMutation, CreateCouponMutationVariables> {
     override document = CreateCouponDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -854,7 +885,7 @@ export const UpdateCouponDocument = gql`
   })
   export class UpdateCouponGQL extends Apollo.Mutation<UpdateCouponMutation, UpdateCouponMutationVariables> {
     override document = UpdateCouponDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -872,7 +903,7 @@ export const DeleteCouponDocument = gql`
   })
   export class DeleteCouponGQL extends Apollo.Mutation<DeleteCouponMutation, DeleteCouponMutationVariables> {
     override document = DeleteCouponDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -890,7 +921,7 @@ export const PayNequiDocument = gql`
   })
   export class PayNequiGQL extends Apollo.Mutation<PayNequiMutation, PayNequiMutationVariables> {
     override document = PayNequiDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -908,7 +939,44 @@ export const PayCardDocument = gql`
   })
   export class PayCardGQL extends Apollo.Mutation<PayCardMutation, PayCardMutationVariables> {
     override document = PayCardDocument;
-    
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const PayBancolombiaDocument = gql`
+    mutation payBancolombia($input: BtnBancolombiaAction!) {
+  payBtnBancolombia(input: $input) {
+    ...TransactionFragment
+  }
+}
+    ${TransactionFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class PayBancolombiaGQL extends Apollo.Mutation<PayBancolombiaMutation, PayBancolombiaMutationVariables> {
+    override document = PayBancolombiaDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetFinancialInstutionDocument = gql`
+    query getFinancialInstution {
+  getPSEFinancialInstitution {
+    financial_institution_code
+    financial_institution_name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetFinancialInstutionGQL extends Apollo.Query<GetFinancialInstutionQuery, GetFinancialInstutionQueryVariables> {
+    override document = GetFinancialInstutionDocument;
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -926,7 +994,7 @@ export const Get_SubscriptionsDocument = gql`
   })
   export class Get_SubscriptionsGQL extends Apollo.Query<Get_SubscriptionsQuery, Get_SubscriptionsQueryVariables> {
     override document = Get_SubscriptionsDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -944,7 +1012,7 @@ export const CreateUserDocument = gql`
   })
   export class CreateUserGQL extends Apollo.Mutation<CreateUserMutation, CreateUserMutationVariables> {
     override document = CreateUserDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -962,7 +1030,7 @@ export const GetUserSubscriptionsDocument = gql`
   })
   export class GetUserSubscriptionsGQL extends Apollo.Query<GetUserSubscriptionsQuery, GetUserSubscriptionsQueryVariables> {
     override document = GetUserSubscriptionsDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -980,7 +1048,7 @@ export const GetUsersSubscriptionDocument = gql`
   })
   export class GetUsersSubscriptionGQL extends Apollo.Query<GetUsersSubscriptionQuery, GetUsersSubscriptionQueryVariables> {
     override document = GetUsersSubscriptionDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -998,7 +1066,7 @@ export const GetUserSubscriptionDocument = gql`
   })
   export class GetUserSubscriptionGQL extends Apollo.Query<GetUserSubscriptionQuery, GetUserSubscriptionQueryVariables> {
     override document = GetUserSubscriptionDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }

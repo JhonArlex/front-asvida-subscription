@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { CreditCardValidators } from 'angular-cc-library';
 import { lastValueFrom } from 'rxjs';
-import { GetTokenAcceptanceQueryGQL, PayCardGQL, PayNequiGQL } from 'src/app/core/graphql/graphq';
+import { GetFinancialInstutionGQL, GetTokenAcceptanceQueryGQL, PayBancolombiaGQL, PayCardGQL, PayNequiGQL } from 'src/app/core/graphql/graphq';
 import { SubscriptionService } from 'src/app/core/services/subscription.service';
 
 @Component({
@@ -18,6 +18,8 @@ export class PaymentGatewayComponent implements OnInit {
   formPaymentMethod!: FormGroup;
   formCard!: FormGroup;
   formAutorization!: FormGroup;
+  formBancolombia!: FormGroup;
+  formPSE!: FormGroup;
   paymentMethod = null;
 
   loading = false;
@@ -26,6 +28,7 @@ export class PaymentGatewayComponent implements OnInit {
   ERRORS = {
     'coupon_not_found': 'Cupón no encontrado',
   }
+  financialInstitutions: any;
 
 
   constructor(
@@ -35,7 +38,9 @@ export class PaymentGatewayComponent implements OnInit {
     private payNequiGql: PayNequiGQL,
     private subscriptionService: SubscriptionService,
     private payCardGql: PayCardGQL,
-    private router: Router
+    private router: Router,
+    private payBancolombiaGql: PayBancolombiaGQL,
+    private getFinancialInstutionGQL: GetFinancialInstutionGQL
   ) { }
 
   ngOnInit(): void {
@@ -43,12 +48,12 @@ export class PaymentGatewayComponent implements OnInit {
     this.buildNequiForm();
     this.buildCardForm();
     this.buildAutorizationForm();
+    this.buildBancolombiaForm();
     if (!this.subscriptionService.user || !this.subscriptionService.subscription) {
       this.toast.error('No se pudo obtener la información de la suscripción');
       this.router.navigate(['/']);
     }
   }
-
   buildPaymentMethodForm() {
     this.formPaymentMethod = this.fb.group({
       paymentMethod: ['']
@@ -56,6 +61,9 @@ export class PaymentGatewayComponent implements OnInit {
 
     this.formPaymentMethod.valueChanges.subscribe((data: { paymentMethod: null; }) => {
       this.paymentMethod = data.paymentMethod;
+      if (this.paymentMethod == 'PSE') {
+        this.getPSEFinancialInstitutions();
+      }
     });
   }
 
@@ -65,9 +73,22 @@ export class PaymentGatewayComponent implements OnInit {
     });
   }
 
+  buildBancolombiaForm() {
+    this.formBancolombia = this.fb.group({
+      coupon: ['']
+    });
+  }
+
   buildAutorizationForm() {
     this.formAutorization = this.fb.group({
       authorization: [false, Validators.required]
+    });
+  }
+
+  buildFormPSE() {
+    this.formPSE = this.fb.group({
+      financial: [null, Validators.required],
+      typePerson: [null, Validators.required],
     });
   }
 
@@ -88,6 +109,47 @@ export class PaymentGatewayComponent implements OnInit {
     if (this.paymentMethod == 'Card') {
       this.paymentCard();
     }
+
+    if (this.paymentMethod == 'Bancolombia') {
+      this.paymentBancolombia();
+    }
+  }
+
+  paymentBancolombia() {
+    if (!this.formAutorization.valid) {
+      this.toast.error('Debes aceptar los términos y condiciones');
+    }
+    if (this.formBancolombia.valid) {
+      this.loading = true;
+      const coupon = this.formBancolombia.value.coupon;
+      lastValueFrom(this.payBancolombiaGql.mutate({
+        input: {
+          coupon: coupon,
+          email: this.subscriptionService.user.email,
+          user: this.subscriptionService.user.id,
+          amount: parseInt(this.subscriptionService.subscription.price + '00'),
+          period: this.subscriptionService.subscription.time,
+          subscription: this.subscriptionService.subscription.id,
+          payment_description: this.subscriptionService.subscription.name,
+          user_type: 'PERSON',
+          acceptance_token: this.acceptanceToken
+        }
+      })).then(data => {
+        console.log(data);
+        const paymentMethod = JSON.parse(data.data?.payBtnBancolombia.payment_method!);
+        const url = paymentMethod.extra.async_payment_url;
+        window.open(url, '_blank');
+        console.log(url);
+        this.router.navigate(['/transaction', data!.data!.payBtnBancolombia.idTransaction]);
+      }).catch(err => {
+        console.error(err);
+        this.toast.error('Error al realizar el pago. Por favor realizalo de nuevo.');
+      }).finally(() => {
+        this.loading = false;
+      });
+    } else {
+      this.toast.error('Complete los datos');
+    }
   }
 
   getTokenAutorization() {
@@ -103,7 +165,7 @@ export class PaymentGatewayComponent implements OnInit {
         this.loading = false;
       });
     }
-    
+
   }
 
   paymentCard() {
@@ -147,7 +209,7 @@ export class PaymentGatewayComponent implements OnInit {
     } else {
       this.toast.error('Debes completar todos los campos');
     }
-    
+
   }
 
   paymentNequi() {
@@ -180,8 +242,21 @@ export class PaymentGatewayComponent implements OnInit {
     }
   }
 
+  getPSEFinancialInstitutions() {
+    this.loading = true;
+    lastValueFrom(this.getFinancialInstutionGQL.fetch({},{fetchPolicy: 'network-only'})).then(data => {
+      this.financialInstitutions = data!.data.getPSEFinancialInstitution;
+      console.log(this.financialInstitutions);
+    }).catch(err => {
+      console.error(err);
+    }).finally(() => {
+      this.loading = false;
+    });
+  }
 
+  paymentPSE() {
 
+  }
 
 
 }
