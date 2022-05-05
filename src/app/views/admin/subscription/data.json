@@ -1,0 +1,56 @@
+{
+  "fields": [
+    {
+      "name": "name",
+      "type": "text",
+      "label": "Name",
+      "placeholder": "Name",
+      "required": true,
+      "formControlName": "name"
+    },
+    {
+      "name": "price",
+      "type": "text",
+      "label": "Price",
+      "placeholder": "Price",
+      "required": true,
+      "formControlName": "price"
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "label": "Description",
+      "placeholder": "Description",
+      "required": true,
+      "formControlName": "description"
+    },
+    {
+      "name": "time",
+      "type": "text",
+      "label": "Time",
+      "placeholder": "Time",
+      "required": true,
+      "formControlName": "time"
+    },
+    {
+      "name": "state",
+      "type": "select",
+      "label": "State",
+      "placeholder": "State",
+      "required": true,
+      "formControlName": "state",
+      "options": [
+        "active",
+        "inactive"
+      ]
+    },
+    {
+      "name": "benefits",
+      "type": "text",
+      "label": "Benefits",
+      "placeholder": "Benefits",
+      "required": true,
+      "formControlName": "benefits"
+    }
+  ]
+}

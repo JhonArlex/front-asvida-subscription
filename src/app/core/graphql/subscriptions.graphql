@@ -13,3 +13,27 @@ query get_subscriptions($input: SubscriptionConditions!){
     ...SubscriptionFrament
   }
 }
+
+mutation createSubscription ($input: SubscriptionAction!){
+  createSubscription(input: $input){
+    ...SubscriptionFrament
+  }
+}
+
+mutation updateSubscription($input: SubscriptionActionUpdate!){
+  updateSubscription(input: $input){
+    ...SubscriptionFrament
+  }
+}
+
+mutation deleteSubscription($id: String!){
+  deleteSubscription(id: $id){
+    ...SubscriptionFrament
+  }
+}
+
+query getSubscriptions($input: SubscriptionConditions!){
+	getSubscriptions(input: $input){
+    ...SubscriptionFrament
+  }
+}

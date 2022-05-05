@@ -305,6 +305,7 @@ export type Query = {
   getPayments: Payment;
   getPermission: Array<Permission>;
   getPermissions: Array<Permission>;
+  getRole: Array<Role>;
   getRoles: Array<Role>;
   getSubscription: Subscription;
   getSubscriptions: Array<Subscription>;
@@ -340,6 +341,11 @@ export type QueryGetPaymentsArgs = {
 
 export type QueryGetPermissionArgs = {
   input: PermissionInputQuery;
+};
+
+
+export type QueryGetRolesArgs = {
+  input: RolQueryInput;
 };
 
 
@@ -394,6 +400,10 @@ export type RegisterInput = {
   phone: Scalars['String'];
 };
 
+export type RolQueryInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
 export type Role = {
   __typename?: 'Role';
   id: Scalars['String'];
@@ -402,6 +412,7 @@ export type Role = {
 };
 
 export type RoleAction = {
+  name: Scalars['String'];
   permissions: Array<Scalars['String']>;
 };
 
@@ -658,6 +669,41 @@ export type GetFinancialInstutionQueryVariables = Exact<{ [key: string]: never; 
 
 export type GetFinancialInstutionQuery = { __typename?: 'Query', getPSEFinancialInstitution: Array<{ __typename?: 'PSEFinancialInstitution', financial_institution_code: string, financial_institution_name: string }> };
 
+export type RoleFragmentFragment = { __typename?: 'Role', id: string, name: string, permissions: Array<{ __typename?: 'Permission', id: string, code: string }> };
+
+export type CreateRoleMutationVariables = Exact<{
+  input: RoleAction;
+}>;
+
+
+export type CreateRoleMutation = { __typename?: 'Mutation', createRole: { __typename?: 'Role', id: string, name: string, permissions: Array<{ __typename?: 'Permission', id: string, code: string }> } };
+
+export type UpdateRoleMutationVariables = Exact<{
+  input: RoleActionUpdate;
+}>;
+
+
+export type UpdateRoleMutation = { __typename?: 'Mutation', updateRole: { __typename?: 'Role', id: string, name: string, permissions: Array<{ __typename?: 'Permission', id: string, code: string }> } };
+
+export type DeleteRoleMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteRoleMutation = { __typename?: 'Mutation', deleteRole: { __typename?: 'Role', id: string, name: string, permissions: Array<{ __typename?: 'Permission', id: string, code: string }> } };
+
+export type GetRolesQueryVariables = Exact<{
+  input: RolQueryInput;
+}>;
+
+
+export type GetRolesQuery = { __typename?: 'Query', getRoles: Array<{ __typename?: 'Role', id: string, name: string, permissions: Array<{ __typename?: 'Permission', id: string, code: string }> }> };
+
+export type GetPermissionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPermissionsQuery = { __typename?: 'Query', getPermissions: Array<{ __typename?: 'Permission', id: string, code: string }> };
+
 export type SubscriptionFramentFragment = { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string };
 
 export type Get_SubscriptionsQueryVariables = Exact<{
@@ -666,6 +712,34 @@ export type Get_SubscriptionsQueryVariables = Exact<{
 
 
 export type Get_SubscriptionsQuery = { __typename?: 'Query', getSubscriptions: Array<{ __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }> };
+
+export type CreateSubscriptionMutationVariables = Exact<{
+  input: SubscriptionAction;
+}>;
+
+
+export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string } };
+
+export type UpdateSubscriptionMutationVariables = Exact<{
+  input: SubscriptionActionUpdate;
+}>;
+
+
+export type UpdateSubscriptionMutation = { __typename?: 'Mutation', updateSubscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string } };
+
+export type DeleteSubscriptionMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteSubscriptionMutation = { __typename?: 'Mutation', deleteSubscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string } };
+
+export type GetSubscriptionsQueryVariables = Exact<{
+  input: SubscriptionConditions;
+}>;
+
+
+export type GetSubscriptionsQuery = { __typename?: 'Query', getSubscriptions: Array<{ __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }> };
 
 export type UserFragmentFragment = { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, role: Array<{ __typename?: 'Role', name: string }> };
 
@@ -708,6 +782,16 @@ export const CouponFragmentFragmentDoc = gql`
   discount
   state
   discount_type
+}
+    `;
+export const RoleFragmentFragmentDoc = gql`
+    fragment roleFragment on Role {
+  id
+  name
+  permissions {
+    id
+    code
+  }
 }
     `;
 export const UserFragmentFragmentDoc = gql`
@@ -981,6 +1065,97 @@ export const GetFinancialInstutionDocument = gql`
       super(apollo);
     }
   }
+export const CreateRoleDocument = gql`
+    mutation createRole($input: RoleAction!) {
+  createRole(input: $input) {
+    ...roleFragment
+  }
+}
+    ${RoleFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateRoleGQL extends Apollo.Mutation<CreateRoleMutation, CreateRoleMutationVariables> {
+    override document = CreateRoleDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateRoleDocument = gql`
+    mutation updateRole($input: RoleActionUpdate!) {
+  updateRole(input: $input) {
+    ...roleFragment
+  }
+}
+    ${RoleFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateRoleGQL extends Apollo.Mutation<UpdateRoleMutation, UpdateRoleMutationVariables> {
+    override document = UpdateRoleDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteRoleDocument = gql`
+    mutation deleteRole($id: String!) {
+  deleteRole(id: $id) {
+    ...roleFragment
+  }
+}
+    ${RoleFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteRoleGQL extends Apollo.Mutation<DeleteRoleMutation, DeleteRoleMutationVariables> {
+    override document = DeleteRoleDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetRolesDocument = gql`
+    query getRoles($input: RolQueryInput!) {
+  getRoles(input: $input) {
+    ...roleFragment
+  }
+}
+    ${RoleFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetRolesGQL extends Apollo.Query<GetRolesQuery, GetRolesQueryVariables> {
+    override document = GetRolesDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetPermissionsDocument = gql`
+    query getPermissions {
+  getPermissions {
+    id
+    code
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetPermissionsGQL extends Apollo.Query<GetPermissionsQuery, GetPermissionsQueryVariables> {
+    override document = GetPermissionsDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const Get_SubscriptionsDocument = gql`
     query get_subscriptions($input: SubscriptionConditions!) {
   getSubscriptions(input: $input) {
@@ -994,6 +1169,78 @@ export const Get_SubscriptionsDocument = gql`
   })
   export class Get_SubscriptionsGQL extends Apollo.Query<Get_SubscriptionsQuery, Get_SubscriptionsQueryVariables> {
     override document = Get_SubscriptionsDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateSubscriptionDocument = gql`
+    mutation createSubscription($input: SubscriptionAction!) {
+  createSubscription(input: $input) {
+    ...SubscriptionFrament
+  }
+}
+    ${SubscriptionFramentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateSubscriptionGQL extends Apollo.Mutation<CreateSubscriptionMutation, CreateSubscriptionMutationVariables> {
+    override document = CreateSubscriptionDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateSubscriptionDocument = gql`
+    mutation updateSubscription($input: SubscriptionActionUpdate!) {
+  updateSubscription(input: $input) {
+    ...SubscriptionFrament
+  }
+}
+    ${SubscriptionFramentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateSubscriptionGQL extends Apollo.Mutation<UpdateSubscriptionMutation, UpdateSubscriptionMutationVariables> {
+    override document = UpdateSubscriptionDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteSubscriptionDocument = gql`
+    mutation deleteSubscription($id: String!) {
+  deleteSubscription(id: $id) {
+    ...SubscriptionFrament
+  }
+}
+    ${SubscriptionFramentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteSubscriptionGQL extends Apollo.Mutation<DeleteSubscriptionMutation, DeleteSubscriptionMutationVariables> {
+    override document = DeleteSubscriptionDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetSubscriptionsDocument = gql`
+    query getSubscriptions($input: SubscriptionConditions!) {
+  getSubscriptions(input: $input) {
+    ...SubscriptionFrament
+  }
+}
+    ${SubscriptionFramentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetSubscriptionsGQL extends Apollo.Query<GetSubscriptionsQuery, GetSubscriptionsQueryVariables> {
+    override document = GetSubscriptionsDocument;
 
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

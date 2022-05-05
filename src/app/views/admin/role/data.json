@@ -1,0 +1,12 @@
+{
+  "fields": [
+      {
+          "name": "name",
+          "type": "text",
+          "label": "Name",
+          "placeholder": "Name",
+          "required": true,
+          "formControlName": "name"
+      }
+  ]
+}

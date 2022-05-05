@@ -11,7 +11,7 @@ import { switchMap } from 'rxjs';
 
 const uri = environment.graphqlUri; // <-- add the URL of the GraphQL server here
 @NgModule({
-  
+
 })
 export class GraphQLModule {
   constructor(
@@ -40,9 +40,9 @@ export class GraphQLModule {
     });
 
     const errorLink: any = onError(({ forward, graphQLErrors, networkError, operation }): any => {
-      if (networkError) {
+      if (graphQLErrors) {
         console.log('[Network error]:', networkError);
-        if (networkError.message.includes('401') && operation.operationName !== 'refresh_token') {
+        if (graphQLErrors[0].message.includes("Unauthorized") && operation.operationName !== 'refresh_token') {
           return authService.refreshToken()!
             .pipe(
               switchMap(async () => forward(operation))

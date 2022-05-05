@@ -32,6 +32,8 @@ const routes: Routes = [
       { path: "maps", component: MapsComponent },
       { path: "clients", loadChildren: () => import("./views/admin/clients/clients.module").then(m => m.ClientsModule) },
       { path: "coupons", loadChildren: () => import("./views/admin/coupons/coupons.module").then(m => m.CouponsModule) },
+      { path: "role", loadChildren: () => import("./views/admin/role/role.module").then(m => m.RoleModule) },
+      { path: "subscription", loadChildren: () => import("./views/admin/subscription/subscription.module").then(m => m.SubscriptionModule) },
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
     ],
   },

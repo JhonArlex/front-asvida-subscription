@@ -39,6 +39,6 @@ export class AuthService {
     logout() {
         this.user = null;
         localStorage.removeItem("user");
-
+        window.location.href = '/auth/login';
     }
 }
