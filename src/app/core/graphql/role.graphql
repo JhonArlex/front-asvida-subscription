@@ -1,0 +1,39 @@
+fragment roleFragment on Role {
+  id
+  name
+  permissions{
+    id
+    code
+  }
+}
+
+mutation createRole($input: RoleAction!){
+  createRole(input: $input){
+    ...roleFragment
+  }
+}
+
+mutation updateRole($input: RoleActionUpdate!){
+  updateRole(input: $input){
+    ...roleFragment
+  }
+}
+
+mutation deleteRole($id: String!){
+  deleteRole(id: $id){
+    ...roleFragment
+  }
+}
+
+query getRoles($input: RolQueryInput!){
+  getRoles(input: $input){
+    ...roleFragment
+  }
+}
+
+query getPermissions{
+  getPermissions{
+    id
+    code
+  }
+}

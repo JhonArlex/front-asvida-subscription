@@ -1,0 +1,160 @@
+<div class="flex flex-wrap mt-4">
+  <div class="w-full mb-12 px-4">
+    <div
+      class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white"
+    >
+      <div class="rounded-t mb-0 px-4 py-3 border-0">
+        <div class="flex flex-wrap items-center">
+          <div class="relative w-full px-4 max-w-full flex align-middle">
+            <button
+              (click)="goBack()"
+              class="bg-red-500 text-white active:bg-red-600 text-lg font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button"
+            >
+              <i class="fas fa-angle-left"></i>
+            </button>
+            <h1 class="font-semibold text-lg bg-white ml-2">
+              Formulario de subscription
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4">
+        <form [formGroup]="formSubscription">
+          <div class="mb-3 pt-0">
+            <label
+              class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+              htmlFor="name"
+            >
+              Nombre
+            </label>
+            <input
+              type="text"
+              placeholder="Nombre"
+              id="name"
+              formControlName="name"
+              class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
+            />
+          </div>
+
+          <div class="mb-3 pt-0">
+            <label
+              class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+              htmlFor="price"
+            >
+              Precio
+            </label>
+            <input
+              type="text"
+              placeholder="Precio"
+              id="price"
+              formControlName="price"
+              class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
+            />
+          </div>
+
+          <div class="mb-3 pt-0">
+            <label
+              class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+              htmlFor="description"
+            >
+              Descripción
+            </label>
+            <input
+              type="text"
+              placeholder="Descripción"
+              id="description"
+              formControlName="description"
+              class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
+            />
+          </div>
+
+          <div class="mb-3 pt-0">
+            <label
+              class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+              htmlFor="time"
+            >
+              Tiempo
+            </label>
+            <input
+              type="text"
+              placeholder="Tiempo"
+              id="time"
+              formControlName="time"
+              class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
+            />
+          </div>
+
+          <div class="mb-3 pt-0">
+            <label
+              class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+              htmlFor="state"
+            >
+              State
+            </label>
+            <select
+              formControlName="state"
+              id="state"
+              class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+            >
+              <option value="active">Activo</option>
+
+              <option value="inactive">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="mb-3 pt-0">
+            <label
+              class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+              htmlFor="state"
+            >
+              Beneficios
+            </label>
+
+            <ul>
+              <li class="p-4 flex" *ngFor="let b of benefitsFormArray; index as i">
+                <input
+                  type="text"
+                  placeholder="Beneficio"
+                  [formControl]="benefitsFormArray[i]"
+                  class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full"
+                />
+                <button
+                  (click)="removeBenefit(i)"
+                  class="bg-red-500 ml-4 text-white active:bg-red-600 text-lg font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </li>
+            </ul>
+            <div class="m-4">
+              <button
+                (click)="addBenefit()"
+                class="bg-red-500 text-white active:bg-red-600 text-lg font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              (click)="save()"
+              class="bg-blue-500 text-white active:bg-blue-600 text-lg font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="submit"
+            >
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-loading
+  [show]="loading"
+  [config]="{ backdropBorderRadius: '3px' }"
+></ngx-loading>
