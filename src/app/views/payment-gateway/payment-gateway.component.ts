@@ -51,7 +51,7 @@ export class PaymentGatewayComponent implements OnInit {
     this.buildBancolombiaForm();
     if (!this.subscriptionService.user || !this.subscriptionService.subscription) {
       this.toast.error('No se pudo obtener la información de la suscripción');
-      this.router.navigate(['/']);
+      //this.router.navigate(['/']);
     }
   }
   buildPaymentMethodForm() {
@@ -194,7 +194,6 @@ export class PaymentGatewayComponent implements OnInit {
           coupon: value.coupon
         }
       })).then(data => {
-        console.log(data);
         this.router.navigate(['/transaction', data!.data!.payCard.idTransaction]);
       }).catch(({ graphQLErrors, networkError }) => {
         console.error(graphQLErrors);
@@ -217,6 +216,7 @@ export class PaymentGatewayComponent implements OnInit {
       this.toast.error('Debes aceptar los términos y condiciones');
     }
     if (this.formNequi.valid) {
+      this.loading = true;
       const phone = this.formNequi.value.phone;
       this.payNequiGql.mutate({
         input: {
@@ -230,7 +230,7 @@ export class PaymentGatewayComponent implements OnInit {
         }
       }).toPromise().then(data => {
         console.log(data);
-        // Toca ensayar con una subscripcion real
+        this.router.navigate(['/transaction', data!.data!.payNequi.idTransaction]);
       }).catch(err => {
         console.error(err);
         this.toast.error('Error al realizar el pago. Por favor realizalo de nuevo.');

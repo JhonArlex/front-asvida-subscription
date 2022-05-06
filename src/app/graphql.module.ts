@@ -48,7 +48,7 @@ export class GraphQLModule {
               switchMap(async () => forward(operation))
             );
         } else {
-          authService.logout();
+          //authService.logout();
         }
       }
     });
