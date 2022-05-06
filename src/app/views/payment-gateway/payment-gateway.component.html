@@ -44,9 +44,9 @@
                     Datos de pago
                 </h6>
 
-                <div class="flex flex-wrap" *ngIf="paymentMethod === 'Bancolombia'">
-                  <p class="text-amber-400 mb-4">Alerta: Este método de pago no es recurrente. Deberá realizar los pagos mensualmente de forma manual.</p>
-                  <p class="text-amber-400 mb-4">Alerta: Este método de pago utiliza ventanas emergentes. Debes permitir las ventanas para poder continuar con el pago.</p>
+                <div class="flex flex-col" *ngIf="paymentMethod === 'Bancolombia'">
+                  <p class="text-amber-600 mb-4">Alerta: Este método de pago no es recurrente. Deberá realizar los pagos mensualmente de forma manual.</p>
+                  <p class="text-amber-600 mb-4">Alerta: Este método de pago utiliza ventanas emergentes. Debes permitir las ventanas para poder continuar con el pago.</p>
                   <form [formGroup]="formBancolombia">
                     <div class="w-full lg:w-6/12 px-4">
                       <div class="relative w-full mb-3">
@@ -69,6 +69,7 @@
                 <div class="flex flex-wrap" *ngIf="paymentMethod === 'Nequi'">
                     <form [formGroup]="formNequi">
                         <div class="w-full lg:w-12/12 px-4">
+                          <p class="text-amber-600 mb-4">Alerta: Debes tener tu celular a mano para aceptar la notificación de subscripción.</p>
                             <div class="relative w-full mb-3">
                                 <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                                     htmlFor="grid-password">
@@ -189,4 +190,4 @@
     </div>
 </main>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px', fullScreenBackdrop: true }"></ngx-loading>

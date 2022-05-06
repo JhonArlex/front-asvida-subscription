@@ -3,13 +3,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { lastValueFrom } from 'rxjs';
-import { CreateUserGQL, Get_SubscriptionsGQL, Subscription, User } from 'src/app/core/graphql/graphq';
+import {
+  CreateUserGQL,
+  Get_SubscriptionsGQL,
+  Subscription,
+  User,
+} from 'src/app/core/graphql/graphq';
 import { SubscriptionService } from 'src/app/core/services/subscription.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-subscription',
   templateUrl: './subscription.component.html',
-  styleUrls: ['./subscription.component.css']
+  styleUrls: ['./subscription.component.css'],
 })
 export class SubscriptionComponent implements OnInit {
   subscriptions: Subscription[] = [];
@@ -23,7 +29,7 @@ export class SubscriptionComponent implements OnInit {
     private toast: HotToastService,
     private createUserGql: CreateUserGQL,
     private subscriptionService: SubscriptionService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.buildFormSubscription();
@@ -32,7 +38,9 @@ export class SubscriptionComponent implements OnInit {
 
   async getSubscriptions() {
     try {
-      const { data } = await lastValueFrom(this.getSubscriptionsGql.fetch({ input: { state: "active" } }));
+      const { data } = await lastValueFrom(
+        this.getSubscriptionsGql.fetch({ input: { state: 'active' } })
+      );
       if (data.getSubscriptions.length > 0) {
         this.subscriptions = data.getSubscriptions;
       } else {
@@ -41,7 +49,6 @@ export class SubscriptionComponent implements OnInit {
     } catch (error) {
       console.error(error);
     }
-
   }
 
   selectSubscription(event: Subscription) {
@@ -67,6 +74,21 @@ export class SubscriptionComponent implements OnInit {
       authorizationAssistService: [null, Validators.required],
       authorizationContractService: [null, Validators.required],
     });
+
+    if (!environment.production) {
+      this.formSubscription.patchValue({
+        name: 'Test',
+        typeIdentifier: 'CC',
+        identifier: '12345678',
+        expeditionPlace: 'Lima',
+        typeLivingPlace: 'Propia',
+        stratum: '1',
+        address: 'Av. Prueba',
+        neighborhood: 'Villa Maria',
+        city: 'Lima',
+        email: 'jhon.ocampo123@gmail.com',
+      });
+    }
   }
 
   saveUser() {
@@ -78,43 +100,60 @@ export class SubscriptionComponent implements OnInit {
     this.createUser(formValue);
   }
 
-  createUser(user: { name: any; typeIdentifier: any; identifier: any; expeditionPlace: any; typeLivingPlace: any; stratum: any; address: any; neighborhood: any; city: any; email: any; phone: any; authorizationFacture: any; authorizationHabeasData: any; authorizationAssistService: any; authorizationContractService: any; }) {
-    this.createUserGql.mutate({
-      input: {
-        name: user.name,
-        typeDni: user.typeIdentifier,
-        dni: user.identifier,
-        expeditionPlace: user.expeditionPlace,
-        typeLivingPlace: user.typeLivingPlace,
-        stratum: user.stratum,
-        address: user.address,
-        neighborhood: user.neighborhood,
-        city: user.city,
-        email: user.email,
-        phone: user.phone,
-        authorizationFacture: user.authorizationFacture,
-        authorizationHabeasData: user.authorizationHabeasData,
-        authorizationAssistService: user.authorizationAssistService,
-        authorizationContractService: user.authorizationContractService,
-        dateSignature: new Date(),
-        role: ['621bbf90fbd65b0aac28b6c7'],
-      }
-    }).subscribe({
-      next: (res) => {
-        this.toast.success('Usuario creado con éxito');
-        this.subscriptionService.user = res!.data!.createUser as User;
-        this.router.navigate(['/payment-gateway']);
-      },
-      error: (e) => {
-        console.error(e);
-        this.toast.error('Error al crear usuario');
-      },
-      complete: () => console.info('complete')
-    });
+  createUser(user: {
+    name: any;
+    typeIdentifier: any;
+    identifier: any;
+    expeditionPlace: any;
+    typeLivingPlace: any;
+    stratum: any;
+    address: any;
+    neighborhood: any;
+    city: any;
+    email: any;
+    phone: any;
+    authorizationFacture: any;
+    authorizationHabeasData: any;
+    authorizationAssistService: any;
+    authorizationContractService: any;
+  }) {
+    this.createUserGql
+      .mutate({
+        input: {
+          name: user.name,
+          typeDni: user.typeIdentifier,
+          dni: user.identifier,
+          expeditionPlace: user.expeditionPlace,
+          typeLivingPlace: user.typeLivingPlace,
+          stratum: user.stratum,
+          address: user.address,
+          neighborhood: user.neighborhood,
+          city: user.city,
+          email: user.email,
+          phone: user.phone,
+          authorizationFacture: user.authorizationFacture,
+          authorizationHabeasData: user.authorizationHabeasData,
+          authorizationAssistService: user.authorizationAssistService,
+          authorizationContractService: user.authorizationContractService,
+          dateSignature: new Date(),
+          role: ['621bbf90fbd65b0aac28b6c7'],
+        },
+      })
+      .subscribe({
+        next: (res) => {
+          this.toast.success('Usuario creado con éxito');
+          this.subscriptionService.user = res!.data!.createUser as User;
+          this.router.navigate(['/payment-gateway']);
+        },
+        error: (e) => {
+          console.error(e);
+          this.toast.error('Error al crear usuario');
+        },
+        complete: () => console.info('complete'),
+      });
   }
 
   goToPaymentGateway() {
     this.router.navigate(['/payment-gateway']);
   }
-
 }
