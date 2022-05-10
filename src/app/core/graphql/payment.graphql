@@ -43,3 +43,9 @@ query getFinancialInstution{
     financial_institution_name
   }
 }
+
+mutation paymentPSE($input: PSEAction!){
+  payPSE(input: $input){
+    ...TransactionFragment
+  }
+}
