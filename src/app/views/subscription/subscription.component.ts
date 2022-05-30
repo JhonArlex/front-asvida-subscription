@@ -69,13 +69,14 @@ export class SubscriptionComponent implements OnInit {
       city: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
+      tel: ['', Validators.required],
       authorizationFacture: [null, Validators.required],
       authorizationHabeasData: [null, Validators.required],
       authorizationAssistService: [null, Validators.required],
       authorizationContractService: [null, Validators.required],
     });
 
-    if (!environment.production) {
+    /* if (!environment.production) {
       this.formSubscription.patchValue({
         name: 'Test',
         typeIdentifier: 'CC',
@@ -88,7 +89,7 @@ export class SubscriptionComponent implements OnInit {
         city: 'Lima',
         email: 'jhon.ocampo123@gmail.com',
       });
-    }
+    } */
   }
 
   saveUser() {

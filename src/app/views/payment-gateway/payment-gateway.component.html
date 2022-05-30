@@ -26,6 +26,7 @@
                     name="paymentMethod"
                     formControlName="paymentMethod"
                     value="Nequi"
+                    id="paymentMethodNequi"
                   />
                   <img
                     src="../../../assets/img/logo_nequi_header.svg"
@@ -39,6 +40,7 @@
                     name="paymentMethod"
                     formControlName="paymentMethod"
                     value="Card"
+                    id="paymentMethodCreditCard"
                   />
                   <i class="fas fa-credit-card"></i> Tarjeta crédito/débito
                 </div>
@@ -66,7 +68,8 @@
                   />
                   <img
                     src="../../../assets/img/brand-pse.png"
-                    alt="Nequi"
+                    alt="PSE"
+                    width="130"
                   />
                 </div>
               </div>
@@ -160,6 +163,12 @@
                 Alerta: Debes tener tu celular a mano para aceptar la
                 notificación de subscripción.
               </p>
+              <p class="text-amber-600 mb-4">
+                1- Debes ingresar a Nequi
+                2- Debes de ir a la sección de notificaciones
+                3- Dar al mensaje de subscripción pendiente con as vida.
+                4- Listo. Tu suscripción esta activa.
+              </p>
               <div class="relative w-full mb-3">
                 <label
                   class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -170,6 +179,7 @@
                 <input
                   type="tel"
                   formControlName="phone"
+                  id="phoneNequi"
                   class="border-0 w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
                 />
               </div>
@@ -220,6 +230,7 @@
                   formControlName="cardName"
                   placeholder="Nombres y apellidos"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  id="cc-name"
                 />
                 <span
                   *ngIf="
@@ -278,6 +289,7 @@
                   ccCvc
                   placeholder="CVC"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  id="cc-cvv"
                 />
                 <span
                   *ngIf="
@@ -323,6 +335,7 @@
             <div class="relative w-full mb-3 flex items-center">
               <input
                 type="checkbox"
+                id="authorization"
                 formControlName="authorization"
                 (change)="getTokenAutorization()"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
@@ -346,6 +359,7 @@
         <button
           (click)="onSubmit()"
           [disabled]="!formCard.valid && !formAutorization.valid"
+          id="makePay"
           class="bg-red-500 disabled:opacity-75 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
           type="button"
         >

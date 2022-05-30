@@ -62,7 +62,7 @@ export class PaymentGatewayComponent implements OnInit {
       !this.subscriptionService.subscription
     ) {
       this.toast.error('No se pudo obtener la información de la suscripción');
-      this.router.navigate(['/']);
+      //this.router.navigate(['/']);
     }
   }
   buildPaymentMethodForm() {
@@ -126,17 +126,21 @@ export class PaymentGatewayComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.paymentMethod == 'Nequi') {
-      this.paymentNequi();
-    }
-    if (this.paymentMethod == 'Card') {
-      this.paymentCard();
-    }
-    if (this.paymentMethod == 'Bancolombia') {
-      this.paymentBancolombia();
-    }
-    if (this.paymentMethod == 'PSE') {
-      this.paymentPSE();
+    if (!this.formAutorization.get('authorization')!.value) {
+      this.toast.error('Debes aceptar los términos y condiciones.');
+    } else {
+      if (this.paymentMethod == 'Nequi') {
+        this.paymentNequi();
+      }
+      if (this.paymentMethod == 'Card') {
+        this.paymentCard();
+      }
+      if (this.paymentMethod == 'Bancolombia') {
+        this.paymentBancolombia();
+      }
+      if (this.paymentMethod == 'PSE') {
+        this.paymentPSE();
+      }
     }
   }
 
@@ -213,10 +217,6 @@ export class PaymentGatewayComponent implements OnInit {
   }
 
   paymentCard() {
-    if (!this.formAutorization.valid) {
-      this.toast.error('Debes aceptar los términos y condiciones');
-    }
-
     if (this.formCard.valid) {
       this.loading = true;
       const value = this.formCard.value;
@@ -296,10 +296,14 @@ export class PaymentGatewayComponent implements OnInit {
           ]);
         })
         .catch((err) => {
-          console.error(err);
-          this.toast.error(
-            'Error al realizar el pago. Por favor realizalo de nuevo.'
-          );
+          const errorJson = JSON.parse(err.message);
+          if (errorJson.code == 'NequiTimeOut') {
+            window.alert('El tiempo de aceptación de la notificación ha expirado. Intente el pago de nuevo.');
+          } else {
+            window.alert(
+              'Error al realizar el pago. Por favor realizalo de nuevo.'
+            );
+          }
         })
         .finally(() => {
           this.loading = false;

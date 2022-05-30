@@ -36,7 +36,7 @@
                                     htmlFor="grid-password">
                                     Nombres y apellidos
                                 </label>
-                                <input type="text" formControlName="name"
+                                <input type="text" formControlName="name" id="name"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                                     htmlFor="grid-password">
                                     Correo electrónico
                                 </label>
-                                <input type="email" formControlName="email"
+                                <input type="email" formControlName="email" id="email"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                     htmlFor="grid-password">
                                     Celular
                                 </label>
-                                <input type="text" formControlName="phone"
+                                <input type="text" formControlName="phone" id="phone"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                                     htmlFor="grid-password">
                                     Telefono
                                 </label>
-                                <input type="text"
+                                <input type="text" id="tel" formControlName="tel"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                                         htmlFor="grid-password">
                                         Tipo
                                     </label>
-                                    <select formControlName="typeIdentifier">
+                                    <select formControlName="typeIdentifier" id="typeIdentifier">
                                         <option value="CC">CC</option>
                                         <option value="NIT">NIT</option>
                                     </select>
@@ -89,7 +89,7 @@
                                         htmlFor="grid-password">
                                         Identificación
                                     </label>
-                                    <input type="text" formControlName="identifier"
+                                    <input type="text" formControlName="identifier" id="identifier"
                                         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                                 </div>
 
@@ -102,7 +102,7 @@
                                     htmlFor="grid-password">
                                     Lugar expedición
                                 </label>
-                                <input type="text" formControlName="expeditionPlace"
+                                <input type="text" formControlName="expeditionPlace" id="expeditionPlace"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -113,9 +113,9 @@
                                     htmlFor="grid-password">
                                     Tipo de vivienda
                                 </label>
-                                <input type="radio" name="typeLivingPlace" formControlName="typeLivingPlace" value="Propia">
+                                <input type="radio" name="typeLivingPlace" formControlName="typeLivingPlace" value="Propia" id="propia">
                                 Propia
-                                <input type="radio" name="typeLivingPlace" formControlName="typeLivingPlace"
+                                <input type="radio" name="typeLivingPlace" formControlName="typeLivingPlace" id="alquilada"
                                     value="Alquilada"> Alquilada
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                     htmlFor="grid-password">
                                     Estrato
                                 </label>
-                                <input type="text" formControlName="stratum"
+                                <input type="text" formControlName="stratum" id="stratum"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                                     htmlFor="grid-password">
                                     Dirección
                                 </label>
-                                <input type="text" formControlName="address"
+                                <input type="text" formControlName="address" id="address"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                                     htmlFor="grid-password">
                                     Barrio
                                 </label>
-                                <input type="text" formControlName="neighborhood"
+                                <input type="text" formControlName="neighborhood" id="neighborhood"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                                     htmlFor="grid-password">
                                     Ciudad
                                 </label>
-                                <input type="text" formControlName="city"
+                                <input type="text" formControlName="city" id="city"
                                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
                             </div>
                         </div>
@@ -216,7 +216,7 @@
 
                     <hr class="mt-6 border-b-1 border-blueGray-300" />
 
-                    <button [disabled]="!formSubscription.valid" (click)="saveUser()" class="bg-red-500 text-white mt-4 active:bg-red-600 disabled:opacity-75 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                    <button id="pay" [disabled]="!formSubscription.valid" (click)="saveUser()" class="bg-red-500 text-white mt-4 active:bg-red-600 disabled:opacity-75 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                         Ir a pasarela de pagos
                     </button>
 
