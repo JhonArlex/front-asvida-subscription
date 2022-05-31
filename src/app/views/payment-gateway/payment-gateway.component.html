@@ -1,193 +1,376 @@
 <app-index-navbar></app-index-navbar>
 <main>
-    <div class="w-full max-w-screen-xl mx-auto px-9 pt-16">
-        <h1 class="font-bold text-3xl my-4">Pasarela de pago</h1>
-        <div
-            class="mt-4 relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-            <div class="rounded-t bg-white mb-0 px-6 py-6">
-                <div class="text-center flex justify-around">
-                    <h6 class="text-blueGray-700 text-xl font-bold">Método de pago</h6>
-                </div>
-            </div>
-            <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                    Seleccione un método de pago recurrente
-                </h6>
-
-                <form [formGroup]="formPaymentMethod">
-                  <div class="flex flex-wrap">
-                      <div class="w-full px-4">
-                          <div class="relative w-full mb-3 flex flex-wrap gap-3">
-                              <div class="flex items-center mr-4">
-                                  <input class="mr-3" type="radio" name="paymentMethod"
-                                      formControlName="paymentMethod" value="Nequi">
-                                  <img src="../../../assets/img/logo_nequi_header.svg" alt="Nequi">
-                              </div>
-                              <div class="flex items-center">
-                                  <input class="mr-3" type="radio" name="paymentMethod"
-                                      formControlName="paymentMethod" value="Card">
-                                  <i class="fas fa-credit-card"></i> Tarjeta crédito/débito
-                              </div>
-                              <div class="flex items-center">
-                                <input class="mr-3" type="radio" name="paymentMethod"
-                                    formControlName="paymentMethod" value="Bancolombia">
-                                <img width="130" src="../../../assets/img/bancolombia.webp" alt="Bancolombia">
-                            </div>
-                          </div>
-                      </div>
-                    </div>
-                </form>
-
-                <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-                <h6 *ngIf="paymentMethod" class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                    Datos de pago
-                </h6>
-
-                <div class="flex flex-col" *ngIf="paymentMethod === 'Bancolombia'">
-                  <p class="text-amber-600 mb-4">Alerta: Este método de pago no es recurrente. Deberá realizar los pagos mensualmente de forma manual.</p>
-                  <p class="text-amber-600 mb-4">Alerta: Este método de pago utiliza ventanas emergentes. Debes permitir las ventanas para poder continuar con el pago.</p>
-                  <form [formGroup]="formBancolombia">
-                    <div class="w-full lg:w-6/12 px-4">
-                      <div class="relative w-full mb-3">
-                          <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                              htmlFor="grid-password">
-                              Cupon de descuento
-                          </label>
-                          <!-- Validacion codigo de seguridad -->
-                          <input formControlName="coupon" type="text" autocomplete="off"
-                              class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                      </div>
-                    </div>
-                  </form>
-                </div>
-
-                <div class="flex flex-wrap" *ngIf="paymentMethod === 'pse'">
-
-                </div>
-
-                <div class="flex flex-wrap" *ngIf="paymentMethod === 'Nequi'">
-                    <form [formGroup]="formNequi">
-                        <div class="w-full lg:w-12/12 px-4">
-                          <p class="text-amber-600 mb-4">Alerta: Debes tener tu celular a mano para aceptar la notificación de subscripción.</p>
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Número de nequi
-                                </label>
-                                <input type="tel" formControlName="phone"
-                                    class="border-0 w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div *ngIf="paymentMethod === 'Card'">
-                    <form [formGroup]="formCard" class="flex flex-wrap">
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Número de tarjeta
-                                </label>
-                                <input formControlName="cardNumber" id="cc-number" type="tel" ccNumber
-                                    #ccNumber="ccNumber" placeholder="0000 0000 0000 0000"
-                                    class="border-0 w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
-                                <span
-                                    *ngIf="!formCard.get('cardNumber')!.valid && (formCard.get('cardNumber')!.dirty || formCard.get('cardNumber')!.touched)"
-                                    class="m-3 text-red-600">Número de tarjeta incorrecto</span>
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Nombres tarjeta
-                                </label>
-                                <input type="text" formControlName="cardName" placeholder="Nombres y apellidos"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                                <span
-                                    *ngIf="!formCard.get('cardName')!.valid && (formCard.get('cardName')!.dirty || formCard.get('cardName')!.touched)"
-                                    class="m-3 text-red-600">Nombre de tarjeta incorrecto</span>
-                            </div>
-                        </div>
-
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Fecha de expiración
-                                </label>
-                                <input formControlName="cardExpiration" id="cc-exp-date" type="tel"
-                                    autocomplete="cc-exp" ccExp placeholder="MM/AAAA"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                                <span
-                                    *ngIf="!formCard.get('cardExpiration')!.valid && (formCard.get('cardExpiration')!.dirty || formCard.get('cardExpiration')!.touched)"
-                                    class="m-3 text-red-600">Fecha de expiración incorrecta</span>
-
-                            </div>
-                        </div>
-
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Código de seguridad
-                                </label>
-                                <!-- Validacion codigo de seguridad -->
-                                <input formControlName="cardCvv" type="tel" autocomplete="off" ccCvc placeholder="CVC"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                                <span
-                                    *ngIf="!formCard.get('cardCvv')!.valid && (formCard.get('cardCvv')!.dirty || formCard.get('cardCvv')!.touched)"
-                                    class="m-3 text-red-600">Código de seguridad incorrecto</span>
-                            </div>
-                        </div>
-                        <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Cupon de descuento
-                                </label>
-                                <!-- Validacion codigo de seguridad -->
-                                <input formControlName="coupon" type="text" autocomplete="off"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-                <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-                <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                    Autorización
-                </h6>
-
-                <div class="w-full lg:w-12/12 px-4">
-                    <form [formGroup]="formAutorization">
-                        <div class="relative w-full mb-3 flex items-center">
-                            <input type="checkbox" formControlName="authorization" (change)="getTokenAutorization()"
-                                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
-                            <label class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
-                                htmlFor="grid-password">
-                                Acepto haber leído los <a class="text-blueGray-800" target="_blank"
-                                    href="https://wompi.co/wp-content/uploads/2019/09/TERMINOS-Y-CONDICIONES-DE-USO-USUARIOS-WOMPI.pdf">términos
-                                    y condiciones y la política de privacidada</a> para hacer esta compra.
-                            </label>
-                        </div>
-                    </form>
-
-                </div>
-                <button (click)="onSubmit()" [disabled]="!formCard.valid && !formAutorization.valid"
-                    class="bg-red-500 disabled:opacity-75 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button">
-                    Realizar pago
-                </button>
-            </div>
+  <div class="w-full max-w-screen-xl mx-auto px-9 pt-16">
+    <h1 class="font-bold text-3xl my-4">Pasarela de pago</h1>
+    <div
+      class="mt-4 relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0"
+    >
+      <div class="rounded-t bg-white mb-0 px-6 py-6">
+        <div class="text-center flex justify-around">
+          <h6 class="text-blueGray-700 text-xl font-bold">Método de pago</h6>
         </div>
+      </div>
+      <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+          Seleccione un método de pago recurrente
+        </h6>
+
+        <form [formGroup]="formPaymentMethod">
+          <div class="flex flex-wrap">
+            <div class="w-full px-4">
+              <div class="relative w-full mb-3 flex flex-wrap gap-3">
+                <div class="flex items-center mr-4">
+                  <input
+                    class="mr-3"
+                    type="radio"
+                    name="paymentMethod"
+                    formControlName="paymentMethod"
+                    value="Nequi"
+                    id="paymentMethodNequi"
+                  />
+                  <img
+                    src="../../../assets/img/logo_nequi_header.svg"
+                    alt="Nequi"
+                  />
+                </div>
+                <div class="flex items-center">
+                  <input
+                    class="mr-3"
+                    type="radio"
+                    name="paymentMethod"
+                    formControlName="paymentMethod"
+                    value="Card"
+                    id="paymentMethodCreditCard"
+                  />
+                  <i class="fas fa-credit-card"></i> Tarjeta crédito/débito
+                </div>
+                <div class="flex items-center">
+                  <input
+                    class="mr-3"
+                    type="radio"
+                    name="paymentMethod"
+                    formControlName="paymentMethod"
+                    value="Bancolombia"
+                  />
+                  <img
+                    width="130"
+                    src="../../../assets/img/bancolombia.webp"
+                    alt="Bancolombia"
+                  />
+                </div>
+                <div class="flex items-center">
+                  <input
+                    class="mr-3"
+                    type="radio"
+                    name="paymentMethod"
+                    formControlName="paymentMethod"
+                    value="PSE"
+                  />
+                  <img
+                    src="../../../assets/img/brand-pse.png"
+                    alt="PSE"
+                    width="130"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+        <h6
+          *ngIf="paymentMethod"
+          class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase"
+        >
+          Datos de pago
+        </h6>
+
+        <div class="flex flex-col" *ngIf="paymentMethod === 'Bancolombia'">
+          <p class="text-amber-600 mb-4">
+            Alerta: Este método de pago no es recurrente. Deberá realizar los
+            pagos mensualmente de forma manual.
+          </p>
+          <p class="text-amber-600 mb-4">
+            Alerta: Este método de pago utiliza ventanas emergentes. Debes
+            permitir las ventanas para poder continuar con el pago.
+          </p>
+          <form [formGroup]="formBancolombia">
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Cupon de descuento
+                </label>
+                <!-- Validacion codigo de seguridad -->
+                <input
+                  formControlName="coupon"
+                  type="text"
+                  autocomplete="off"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="flex flex-wrap" *ngIf="paymentMethod === 'PSE'">
+          <p class="text-amber-600 mb-4">
+            Alerta: Este método de pago no es recurrente. Deberá realizar los
+            pagos mensualmente de forma manual.
+          </p>
+          <p class="text-amber-600 mb-4">
+            Alerta: Este método de pago utiliza ventanas emergentes. Debes
+            permitir las ventanas para poder continuar con el pago.
+          </p>
+          <form [formGroup]="formPSE">
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Cupon de descuento
+                </label>
+                <!-- Validacion codigo de seguridad -->
+                <input
+                  formControlName="coupon"
+                  type="text"
+                  autocomplete="off"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+              <div class="relative w-full mb-3">
+                <label>Seleccione una institución financiera</label>
+                <select
+                  formControlName="financial"
+                  id="financial"
+                  class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  <option [value]="fi.financial_institution_code" *ngFor="let fi of financialInstitutions">{{fi.financial_institution_name}}</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="flex flex-wrap" *ngIf="paymentMethod === 'Nequi'">
+          <form [formGroup]="formNequi">
+            <div class="w-full lg:w-12/12 px-4">
+              <p class="text-amber-600 mb-4">
+                Alerta: Debes tener tu celular a mano para aceptar la
+                notificación de subscripción.
+              </p>
+              <p class="text-amber-600 mb-4">
+                1- Debes ingresar a Nequi
+                2- Debes de ir a la sección de notificaciones
+                3- Dar al mensaje de subscripción pendiente con as vida.
+                4- Listo. Tu suscripción esta activa.
+              </p>
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Número de nequi
+                </label>
+                <input
+                  type="tel"
+                  formControlName="phone"
+                  id="phoneNequi"
+                  class="border-0 w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div *ngIf="paymentMethod === 'Card'">
+          <form [formGroup]="formCard" class="flex flex-wrap">
+            <div class="w-full lg:w-12/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Número de tarjeta
+                </label>
+                <input
+                  formControlName="cardNumber"
+                  id="cc-number"
+                  type="tel"
+                  ccNumber
+                  #ccNumber="ccNumber"
+                  placeholder="0000 0000 0000 0000"
+                  class="border-0 w-full px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                />
+                <span
+                  *ngIf="
+                    !formCard.get('cardNumber')!.valid &&
+                    (formCard.get('cardNumber')!.dirty ||
+                      formCard.get('cardNumber')!.touched)
+                  "
+                  class="m-3 text-red-600"
+                  >Número de tarjeta incorrecto</span
+                >
+              </div>
+            </div>
+            <div class="w-full lg:w-12/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Nombres tarjeta
+                </label>
+                <input
+                  type="text"
+                  formControlName="cardName"
+                  placeholder="Nombres y apellidos"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  id="cc-name"
+                />
+                <span
+                  *ngIf="
+                    !formCard.get('cardName')!.valid &&
+                    (formCard.get('cardName')!.dirty ||
+                      formCard.get('cardName')!.touched)
+                  "
+                  class="m-3 text-red-600"
+                  >Nombre de tarjeta incorrecto</span
+                >
+              </div>
+            </div>
+
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Fecha de expiración
+                </label>
+                <input
+                  formControlName="cardExpiration"
+                  id="cc-exp-date"
+                  type="tel"
+                  autocomplete="cc-exp"
+                  ccExp
+                  placeholder="MM/AAAA"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+                <span
+                  *ngIf="
+                    !formCard.get('cardExpiration')!.valid &&
+                    (formCard.get('cardExpiration')!.dirty ||
+                      formCard.get('cardExpiration')!.touched)
+                  "
+                  class="m-3 text-red-600"
+                  >Fecha de expiración incorrecta</span
+                >
+              </div>
+            </div>
+
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Código de seguridad
+                </label>
+                <!-- Validacion codigo de seguridad -->
+                <input
+                  formControlName="cardCvv"
+                  type="tel"
+                  autocomplete="off"
+                  ccCvc
+                  placeholder="CVC"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  id="cc-cvv"
+                />
+                <span
+                  *ngIf="
+                    !formCard.get('cardCvv')!.valid &&
+                    (formCard.get('cardCvv')!.dirty ||
+                      formCard.get('cardCvv')!.touched)
+                  "
+                  class="m-3 text-red-600"
+                  >Código de seguridad incorrecto</span
+                >
+              </div>
+            </div>
+            <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Cupon de descuento
+                </label>
+                <!-- Validacion codigo de seguridad -->
+                <input
+                  formControlName="coupon"
+                  type="text"
+                  autocomplete="off"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+          Autorización
+        </h6>
+
+        <div class="w-full lg:w-12/12 px-4">
+          <form [formGroup]="formAutorization">
+            <div class="relative w-full mb-3 flex items-center">
+              <input
+                type="checkbox"
+                id="authorization"
+                formControlName="authorization"
+                (change)="getTokenAutorization()"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+              />
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
+                htmlFor="grid-password"
+              >
+                Acepto haber leído los
+                <a
+                  class="text-blueGray-800"
+                  target="_blank"
+                  href="https://wompi.co/wp-content/uploads/2019/09/TERMINOS-Y-CONDICIONES-DE-USO-USUARIOS-WOMPI.pdf"
+                  >términos y condiciones y la política de privacidada</a
+                >
+                para hacer esta compra.
+              </label>
+            </div>
+          </form>
+        </div>
+        <button
+          (click)="onSubmit()"
+          [disabled]="!formCard.valid && !formAutorization.valid"
+          id="makePay"
+          class="bg-red-500 disabled:opacity-75 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button"
+        >
+          Realizar pago
+        </button>
+      </div>
     </div>
+  </div>
 </main>
 
-<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px', fullScreenBackdrop: true }"></ngx-loading>
+<ngx-loading
+  [show]="loading"
+  [config]="{ backdropBorderRadius: '3px', fullScreenBackdrop: true }"
+></ngx-loading>

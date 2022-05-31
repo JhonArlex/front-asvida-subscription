@@ -4,16 +4,23 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { CreditCardValidators } from 'angular-cc-library';
 import { lastValueFrom } from 'rxjs';
-import { GetFinancialInstutionGQL, GetTokenAcceptanceQueryGQL, PayBancolombiaGQL, PayCardGQL, PayNequiGQL } from 'src/app/core/graphql/graphq';
+import {
+  GetFinancialInstutionGQL,
+  GetTokenAcceptanceQueryGQL,
+  PayBancolombiaGQL,
+  PayCardGQL,
+  PaymentPseGQL,
+  PayNequiGQL,
+  PseFinancialInstitution,
+} from 'src/app/core/graphql/graphq';
 import { SubscriptionService } from 'src/app/core/services/subscription.service';
 
 @Component({
   selector: 'app-payment-gateway',
   templateUrl: './payment-gateway.component.html',
-  styleUrls: ['./payment-gateway.component.css']
+  styleUrls: ['./payment-gateway.component.css'],
 })
 export class PaymentGatewayComponent implements OnInit {
-
   formNequi!: FormGroup;
   formPaymentMethod!: FormGroup;
   formCard!: FormGroup;
@@ -26,10 +33,9 @@ export class PaymentGatewayComponent implements OnInit {
   acceptanceToken!: string;
 
   ERRORS = {
-    'coupon_not_found': 'Cupón no encontrado',
-  }
-  financialInstitutions: any;
-
+    coupon_not_found: 'Cupón no encontrado',
+  };
+  financialInstitutions: PseFinancialInstitution[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -40,8 +46,9 @@ export class PaymentGatewayComponent implements OnInit {
     private payCardGql: PayCardGQL,
     private router: Router,
     private payBancolombiaGql: PayBancolombiaGQL,
-    private getFinancialInstutionGQL: GetFinancialInstutionGQL
-  ) { }
+    private getFinancialInstutionGQL: GetFinancialInstutionGQL,
+    private payPSEGql: PaymentPseGQL
+  ) {}
 
   ngOnInit(): void {
     this.buildPaymentMethodForm();
@@ -49,46 +56,52 @@ export class PaymentGatewayComponent implements OnInit {
     this.buildCardForm();
     this.buildAutorizationForm();
     this.buildBancolombiaForm();
-    if (!this.subscriptionService.user || !this.subscriptionService.subscription) {
+    this.buildFormPSE();
+    if (
+      !this.subscriptionService.user ||
+      !this.subscriptionService.subscription
+    ) {
       this.toast.error('No se pudo obtener la información de la suscripción');
       //this.router.navigate(['/']);
     }
   }
   buildPaymentMethodForm() {
     this.formPaymentMethod = this.fb.group({
-      paymentMethod: ['']
+      paymentMethod: [''],
     });
 
-    this.formPaymentMethod.valueChanges.subscribe((data: { paymentMethod: null; }) => {
-      this.paymentMethod = data.paymentMethod;
-      if (this.paymentMethod == 'PSE') {
-        this.getPSEFinancialInstitutions();
+    this.formPaymentMethod.valueChanges.subscribe(
+      (data: { paymentMethod: null }) => {
+        this.paymentMethod = data.paymentMethod;
+        if (this.paymentMethod == 'PSE') {
+          this.getPSEFinancialInstitutions();
+        }
       }
-    });
+    );
   }
 
   buildNequiForm() {
     this.formNequi = this.fb.group({
-      phone: ['', Validators.required]
+      phone: ['', Validators.required],
     });
   }
 
   buildBancolombiaForm() {
     this.formBancolombia = this.fb.group({
-      coupon: ['']
+      coupon: [''],
     });
   }
 
   buildAutorizationForm() {
     this.formAutorization = this.fb.group({
-      authorization: [false, Validators.required]
+      authorization: [false, Validators.required],
     });
   }
 
   buildFormPSE() {
     this.formPSE = this.fb.group({
+      coupon: [''],
       financial: [null, Validators.required],
-      typePerson: [null, Validators.required],
     });
   }
 
@@ -96,22 +109,38 @@ export class PaymentGatewayComponent implements OnInit {
     this.formCard = this.fb.group({
       cardNumber: ['', [CreditCardValidators.validateCCNumber]],
       cardExpiration: ['', [CreditCardValidators.validateExpDate]],
-      cardCvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
-      cardName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
-      coupon: ['']
+      cardCvv: [
+        '',
+        [Validators.required, Validators.minLength(3), Validators.maxLength(4)],
+      ],
+      cardName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(50),
+        ],
+      ],
+      coupon: [''],
     });
   }
 
   onSubmit() {
-    if (this.paymentMethod == 'Nequi') {
-      this.paymentNequi();
-    }
-    if (this.paymentMethod == 'Card') {
-      this.paymentCard();
-    }
-
-    if (this.paymentMethod == 'Bancolombia') {
-      this.paymentBancolombia();
+    if (!this.formAutorization.get('authorization')!.value) {
+      this.toast.error('Debes aceptar los términos y condiciones.');
+    } else {
+      if (this.paymentMethod == 'Nequi') {
+        this.paymentNequi();
+      }
+      if (this.paymentMethod == 'Card') {
+        this.paymentCard();
+      }
+      if (this.paymentMethod == 'Bancolombia') {
+        this.paymentBancolombia();
+      }
+      if (this.paymentMethod == 'PSE') {
+        this.paymentPSE();
+      }
     }
   }
 
@@ -119,34 +148,49 @@ export class PaymentGatewayComponent implements OnInit {
     if (!this.formAutorization.valid) {
       this.toast.error('Debes aceptar los términos y condiciones');
     }
+
     if (this.formBancolombia.valid) {
       this.loading = true;
       const coupon = this.formBancolombia.value.coupon;
-      lastValueFrom(this.payBancolombiaGql.mutate({
-        input: {
-          coupon: coupon,
-          email: this.subscriptionService.user.email,
-          user: this.subscriptionService.user.id,
-          amount: parseInt(this.subscriptionService.subscription.price + '00'),
-          period: this.subscriptionService.subscription.time,
-          subscription: this.subscriptionService.subscription.id,
-          payment_description: this.subscriptionService.subscription.name,
-          user_type: 'PERSON',
-          acceptance_token: this.acceptanceToken
-        }
-      })).then(data => {
-        console.log(data);
-        const paymentMethod = JSON.parse(data.data?.payBtnBancolombia.payment_method!);
-        const url = paymentMethod.extra.async_payment_url;
-        window.open(url, '_blank');
-        console.log(url);
-        this.router.navigate(['/transaction', data!.data!.payBtnBancolombia.idTransaction]);
-      }).catch(err => {
-        console.error(err);
-        this.toast.error('Error al realizar el pago. Por favor realizalo de nuevo.');
-      }).finally(() => {
-        this.loading = false;
-      });
+      lastValueFrom(
+        this.payBancolombiaGql.mutate({
+          input: {
+            coupon: coupon,
+            email: this.subscriptionService.user.email,
+            user: this.subscriptionService.user.id,
+            amount: parseInt(
+              this.subscriptionService.subscription.price + '00'
+            ),
+            period: this.subscriptionService.subscription.time,
+            subscription: this.subscriptionService.subscription.id,
+            payment_description: this.subscriptionService.subscription.name,
+            user_type: 'PERSON',
+            acceptance_token: this.acceptanceToken,
+          },
+        })
+      )
+        .then((data) => {
+          console.log(data);
+          const paymentMethod = JSON.parse(
+            data.data?.payBtnBancolombia.payment_method!
+          );
+          const url = paymentMethod.extra.async_payment_url;
+          window.open(url, '_blank');
+          console.log(url);
+          this.router.navigate([
+            '/transaction',
+            data!.data!.payBtnBancolombia.idTransaction,
+          ]);
+        })
+        .catch((err) => {
+          console.error(err);
+          this.toast.error(
+            'Error al realizar el pago. Por favor realizalo de nuevo.'
+          );
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     } else {
       this.toast.error('Complete los datos');
     }
@@ -156,59 +200,70 @@ export class PaymentGatewayComponent implements OnInit {
     this.loading = true;
     const value = this.formAutorization.value;
     if (value) {
-      lastValueFrom(this.getTokenAutorizationGql.fetch({},{fetchPolicy: 'network-only'})).then(data => {
-        this.acceptanceToken = data!.data.getTokenAcceptace.acceptance_token;
-        this.toast.success('Token de aceptación generado');
-      }).catch(err => {
-        console.error(err);
-      }).finally(() => {
-        this.loading = false;
-      });
+      lastValueFrom(
+        this.getTokenAutorizationGql.fetch({}, { fetchPolicy: 'network-only' })
+      )
+        .then((data) => {
+          this.acceptanceToken = data!.data.getTokenAcceptace.acceptance_token;
+          this.toast.success('Token de aceptación generado');
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     }
-
   }
 
   paymentCard() {
-    if (!this.formAutorization.valid) {
-      this.toast.error('Debes aceptar los términos y condiciones');
-    }
-
     if (this.formCard.valid) {
       this.loading = true;
       const value = this.formCard.value;
       const dateExpiration = value.cardExpiration.split('/');
-      lastValueFrom(this.payCardGql.mutate({
-        input: {
-          acceptance_token: this.acceptanceToken,
-          amount: parseInt(this.subscriptionService.subscription.price + '00'),
-          email: this.subscriptionService.user.email,
-          user: this.subscriptionService.user.id,
-          number: value.cardNumber.toString().replace(/\s/g, ''),
-          card_holder: value.cardName,
-          cvc: value.cardCvv.toString(),
-          exp_month: dateExpiration[0].replace(' ', ''),
-          exp_year: dateExpiration[1].replace(' ', '').substr(2, 2),
-          fee: '1',
-          period: this.subscriptionService.subscription.time,
-          subscription: this.subscriptionService.subscription.id,
-          coupon: value.coupon
-        }
-      })).then(data => {
-        this.router.navigate(['/transaction', data!.data!.payCard.idTransaction]);
-      }).catch(({ graphQLErrors, networkError }) => {
-        console.error(graphQLErrors);
-        if (graphQLErrors) {
-          this.toast.error(this.ERRORS[graphQLErrors[0].message as keyof typeof this.ERRORS]);
-        } else {
-          this.toast.error('No se pudo realizar el pago');
-        }
-      }).finally(() => {
-        this.loading = false;
-      });
+      lastValueFrom(
+        this.payCardGql.mutate({
+          input: {
+            acceptance_token: this.acceptanceToken,
+            amount: parseInt(
+              this.subscriptionService.subscription.price + '00'
+            ),
+            email: this.subscriptionService.user.email,
+            user: this.subscriptionService.user.id,
+            number: value.cardNumber.toString().replace(/\s/g, ''),
+            card_holder: value.cardName,
+            cvc: value.cardCvv.toString(),
+            exp_month: dateExpiration[0].replace(' ', ''),
+            exp_year: dateExpiration[1].replace(' ', '').substr(2, 2),
+            fee: '1',
+            period: this.subscriptionService.subscription.time,
+            subscription: this.subscriptionService.subscription.id,
+            coupon: value.coupon,
+          },
+        })
+      )
+        .then((data) => {
+          this.router.navigate([
+            '/transaction',
+            data!.data!.payCard.idTransaction,
+          ]);
+        })
+        .catch(({ graphQLErrors, networkError }) => {
+          console.error(graphQLErrors);
+          if (graphQLErrors) {
+            this.toast.error(
+              this.ERRORS[graphQLErrors[0].message as keyof typeof this.ERRORS]
+            );
+          } else {
+            this.toast.error('No se pudo realizar el pago');
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     } else {
       this.toast.error('Debes completar todos los campos');
     }
-
   }
 
   paymentNequi() {
@@ -218,25 +273,41 @@ export class PaymentGatewayComponent implements OnInit {
     if (this.formNequi.valid) {
       this.loading = true;
       const phone = this.formNequi.value.phone;
-      this.payNequiGql.mutate({
-        input: {
-          acceptance_token: this.acceptanceToken,
-          phone_number: phone,
-          email: this.subscriptionService.user.email,
-          user: this.subscriptionService.user.id,
-          amount: parseInt(this.subscriptionService.subscription.price + '00'),
-          period: this.subscriptionService.subscription.time,
-          subscription: this.subscriptionService.subscription.id
-        }
-      }).toPromise().then(data => {
-        console.log(data);
-        this.router.navigate(['/transaction', data!.data!.payNequi.idTransaction]);
-      }).catch(err => {
-        console.error(err);
-        this.toast.error('Error al realizar el pago. Por favor realizalo de nuevo.');
-      }).finally(() => {
-        this.loading = false;
-      });
+      this.payNequiGql
+        .mutate({
+          input: {
+            acceptance_token: this.acceptanceToken,
+            phone_number: phone,
+            email: this.subscriptionService.user.email,
+            user: this.subscriptionService.user.id,
+            amount: parseInt(
+              this.subscriptionService.subscription.price + '00'
+            ),
+            period: this.subscriptionService.subscription.time,
+            subscription: this.subscriptionService.subscription.id,
+          },
+        })
+        .toPromise()
+        .then((data) => {
+          console.log(data);
+          this.router.navigate([
+            '/transaction',
+            data!.data!.payNequi.idTransaction,
+          ]);
+        })
+        .catch((err) => {
+          const errorJson = JSON.parse(err.message);
+          if (errorJson.code == 'NequiTimeOut') {
+            window.alert('El tiempo de aceptación de la notificación ha expirado. Intente el pago de nuevo.');
+          } else {
+            window.alert(
+              'Error al realizar el pago. Por favor realizalo de nuevo.'
+            );
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     } else {
       this.toast.error('Complete los datos');
     }
@@ -244,19 +315,70 @@ export class PaymentGatewayComponent implements OnInit {
 
   getPSEFinancialInstitutions() {
     this.loading = true;
-    lastValueFrom(this.getFinancialInstutionGQL.fetch({},{fetchPolicy: 'network-only'})).then(data => {
-      this.financialInstitutions = data!.data.getPSEFinancialInstitution;
-      console.log(this.financialInstitutions);
-    }).catch(err => {
-      console.error(err);
-    }).finally(() => {
-      this.loading = false;
-    });
+    lastValueFrom(
+      this.getFinancialInstutionGQL.fetch({}, { fetchPolicy: 'network-only' })
+    )
+      .then((data) => {
+        this.financialInstitutions = data!.data.getPSEFinancialInstitution;
+        console.log(this.financialInstitutions);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        this.loading = false;
+      });
   }
 
   paymentPSE() {
+    if (!this.formAutorization.valid) {
+      this.toast.error('Debes aceptar los términos y condiciones');
+    }
 
+    if (this.formPSE.valid) {
+      this.loading = true;
+      const value = this.formPSE.value;
+      lastValueFrom(
+        this.payPSEGql.mutate({
+          input: {
+            coupon: value.coupon,
+            email: this.subscriptionService.user.email,
+            user: this.subscriptionService.user.id,
+            amount: parseInt(
+              this.subscriptionService.subscription.price + '00'
+            ),
+            period: this.subscriptionService.subscription.time,
+            subscription: this.subscriptionService.subscription.id,
+            payment_description: this.subscriptionService.subscription.name,
+            user_type:
+              this.subscriptionService.user.typeDni === 'CC' ? '0' : '1',
+            acceptance_token: this.acceptanceToken,
+            document: this.subscriptionService.user.dni as string,
+            financial_institution: value.financial,
+            typeDocument: this.subscriptionService.user.typeDni as string,
+          },
+        })
+      )
+        .then((data) => {
+          console.log(data);
+          const paymentMethod = JSON.parse(data.data?.payPSE.payment_method!);
+          const url = paymentMethod.extra.async_payment_url;
+          window.open(url, '_blank');
+          console.log(url);
+          this.router.navigate([
+            '/transaction',
+            data!.data!.payPSE.idTransaction,
+          ]);
+        })
+        .catch((err) => {
+          console.error(err);
+          this.toast.error(
+            'Error al realizar el pago. Por favor realizalo de nuevo.'
+          );
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
   }
-
-
 }

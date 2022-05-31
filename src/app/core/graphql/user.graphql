@@ -15,10 +15,17 @@ fragment UserFragment on User{
   stratum
   access_token
   refresh_token
+  typeDni
 }
 
 mutation createUser($input: UserAction!) {
   createUser(input: $input){
     ...UserFragment
+  }
+}
+
+mutation generateExcel($input: UserSubscriptionConditions!) {
+  exportUserSubscriptionExcel(input: $input){
+    path
   }
 }
