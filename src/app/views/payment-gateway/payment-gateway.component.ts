@@ -1,17 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { CreditCardValidators } from 'angular-cc-library';
 import { lastValueFrom } from 'rxjs';
 import {
   GetFinancialInstutionGQL,
+  GetSubscriptionGQL,
   GetTokenAcceptanceQueryGQL,
+  GetUserGQL,
+  Get_SubscriptionsGQL,
   PayBancolombiaGQL,
   PayCardGQL,
   PaymentPseGQL,
   PayNequiGQL,
   PseFinancialInstitution,
+  Subscription,
+  User,
 } from 'src/app/core/graphql/graphq';
 import { SubscriptionService } from 'src/app/core/services/subscription.service';
 
@@ -36,6 +41,8 @@ export class PaymentGatewayComponent implements OnInit {
     coupon_not_found: 'Cupón no encontrado',
   };
   financialInstitutions: PseFinancialInstitution[] = [];
+  idUser: any;
+  idSubscription: any;
 
   constructor(
     private fb: FormBuilder,
@@ -47,24 +54,71 @@ export class PaymentGatewayComponent implements OnInit {
     private router: Router,
     private payBancolombiaGql: PayBancolombiaGQL,
     private getFinancialInstutionGQL: GetFinancialInstutionGQL,
-    private payPSEGql: PaymentPseGQL
+    private payPSEGql: PaymentPseGQL,
+    private activatedRoute: ActivatedRoute,
+    private getUserGql: GetUserGQL,
+    private getSubscriptionGql: GetSubscriptionGQL
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe({
+      next: (params) => {
+        this.idUser = params['idUser'];
+        this.idSubscription = params['idSubscription'];
+        if (this.idUser && this.idSubscription) {
+          this.getUserSubscription(this.idUser, this.idSubscription);
+        } else {
+          if (
+            !this.subscriptionService.user ||
+            !this.subscriptionService.subscription
+          ) {
+            this.toast.error(
+              'No se pudo obtener la información de la suscripción'
+            );
+            //this.router.navigate(['/']);
+          }
+        }
+      },
+    });
     this.buildPaymentMethodForm();
     this.buildNequiForm();
     this.buildCardForm();
     this.buildAutorizationForm();
     this.buildBancolombiaForm();
     this.buildFormPSE();
-    if (
-      !this.subscriptionService.user ||
-      !this.subscriptionService.subscription
-    ) {
+  }
+
+  async getUserSubscription(idUser: string, idSubscription: string) {
+    try {
+      const user = await this.getUserInfo(idUser);
+      this.subscriptionService.user = user.data.getUsers[0] as User;
+      const subscription = await this.getSubscription(idSubscription);
+      this.subscriptionService.subscription = subscription.data
+        .getSubscription as Subscription;
+    } catch (error) {
+      console.error(error);
       this.toast.error('No se pudo obtener la información de la suscripción');
-      //this.router.navigate(['/']);
     }
   }
+
+  getSubscription(id: string) {
+    return lastValueFrom(
+      this.getSubscriptionGql.fetch({
+        id,
+      })
+    );
+  }
+
+  getUserInfo(id: string) {
+    return lastValueFrom(
+      this.getUserGql.fetch({
+        input: {
+          _id: id,
+        },
+      })
+    );
+  }
+
   buildPaymentMethodForm() {
     this.formPaymentMethod = this.fb.group({
       paymentMethod: [''],
@@ -298,7 +352,9 @@ export class PaymentGatewayComponent implements OnInit {
         .catch((err) => {
           const errorJson = JSON.parse(err.message);
           if (errorJson.code == 'NequiTimeOut') {
-            window.alert('El tiempo de aceptación de la notificación ha expirado. Intente el pago de nuevo.');
+            window.alert(
+              'El tiempo de aceptación de la notificación ha expirado. Intente el pago de nuevo.'
+            );
           } else {
             window.alert(
               'Error al realizar el pago. Por favor realizalo de nuevo.'

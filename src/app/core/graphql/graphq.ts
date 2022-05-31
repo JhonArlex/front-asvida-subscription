@@ -478,6 +478,7 @@ export type SubscriptionActionUpdateData = {
 };
 
 export type SubscriptionConditions = {
+  _id?: InputMaybe<Scalars['String']>;
   state?: InputMaybe<Scalars['String']>;
 };
 
@@ -535,6 +536,7 @@ export type User = {
   stratum?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['String']>;
   typeDni?: Maybe<Scalars['String']>;
+  typeFurniture?: Maybe<Scalars['String']>;
   typeLivingPlace?: Maybe<Scalars['String']>;
 };
 
@@ -558,6 +560,7 @@ export type UserAction = {
   role?: InputMaybe<Array<Scalars['String']>>;
   stratum?: InputMaybe<Scalars['String']>;
   typeDni?: InputMaybe<Scalars['String']>;
+  typeFurniture: Scalars['String'];
   typeLivingPlace?: InputMaybe<Scalars['String']>;
 };
 
@@ -598,11 +601,11 @@ export type UserSubscriptionActionUpdate = {
 };
 
 export type UserSubscriptionActionUpdateData = {
-  expiration: Scalars['DateTime'];
-  state: Scalars['String'];
-  subscription: Scalars['String'];
-  transaction: Scalars['String'];
-  user: Scalars['String'];
+  expiration?: InputMaybe<Scalars['DateTime']>;
+  state?: InputMaybe<Scalars['String']>;
+  subscription?: InputMaybe<Scalars['String']>;
+  transaction?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Scalars['String']>;
 };
 
 export type UserSubscriptionConditions = {
@@ -743,6 +746,13 @@ export type Get_SubscriptionsQueryVariables = Exact<{
 
 export type Get_SubscriptionsQuery = { __typename?: 'Query', getSubscriptions: Array<{ __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }> };
 
+export type GetSubscriptionQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetSubscriptionQuery = { __typename?: 'Query', getSubscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string } };
+
 export type CreateSubscriptionMutationVariables = Exact<{
   input: SubscriptionAction;
 }>;
@@ -772,6 +782,13 @@ export type GetSubscriptionsQueryVariables = Exact<{
 export type GetSubscriptionsQuery = { __typename?: 'Query', getSubscriptions: Array<{ __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }> };
 
 export type UserFragmentFragment = { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, typeDni?: string | null, role: Array<{ __typename?: 'Role', name: string }> };
+
+export type GetUserQueryVariables = Exact<{
+  input: UserQueryInput;
+}>;
+
+
+export type GetUserQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, typeDni?: string | null, role: Array<{ __typename?: 'Role', name: string }> }> };
 
 export type CreateUserMutationVariables = Exact<{
   input: UserAction;
@@ -809,6 +826,13 @@ export type GetUserSubscriptionQueryVariables = Exact<{
 
 
 export type GetUserSubscriptionQuery = { __typename?: 'Query', getUserSubscription: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, typeDni?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
+
+export type UpdateUserSubscriptionMutationVariables = Exact<{
+  input: UserSubscriptionActionUpdate;
+}>;
+
+
+export type UpdateUserSubscriptionMutation = { __typename?: 'Mutation', updateUserSubscription: { __typename?: 'UserSubscription', id: string, expiration: any, state: string, createdAt: any, user: { __typename?: 'User', id: string, name: string, email: string, phone: Array<string>, description?: string | null, createdAt: string, city?: string | null, address?: string | null, dni?: string | null, typeLivingPlace?: string | null, stratum?: string | null, access_token?: string | null, refresh_token?: string | null, typeDni?: string | null, role: Array<{ __typename?: 'Role', name: string }> }, subscription: { __typename?: 'Subscription', id: string, price: string, benefits: Array<string>, name: string, time: number, state: string, description: string }, transaction: Array<{ __typename?: 'Transaction', id: string, created_at: string, amount_in_cents: number, reference: string, customer_email: string, currency: string, payment_method_type: string, payment_method: string, status: string, status_message?: string | null, billing_data?: string | null, shipping_address?: string | null, redirect_url?: string | null, payment_source_id?: string | null, payment_link_id?: string | null, customer_data?: string | null, bill_id?: string | null, idTransaction: string }> } };
 
 export const CouponFragmentFragmentDoc = gql`
     fragment CouponFragment on Coupon {
@@ -1230,6 +1254,24 @@ export const Get_SubscriptionsDocument = gql`
       super(apollo);
     }
   }
+export const GetSubscriptionDocument = gql`
+    query getSubscription($id: String!) {
+  getSubscription(id: $id) {
+    ...SubscriptionFrament
+  }
+}
+    ${SubscriptionFramentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetSubscriptionGQL extends Apollo.Query<GetSubscriptionQuery, GetSubscriptionQueryVariables> {
+    override document = GetSubscriptionDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const CreateSubscriptionDocument = gql`
     mutation createSubscription($input: SubscriptionAction!) {
   createSubscription(input: $input) {
@@ -1297,6 +1339,24 @@ export const GetSubscriptionsDocument = gql`
   })
   export class GetSubscriptionsGQL extends Apollo.Query<GetSubscriptionsQuery, GetSubscriptionsQueryVariables> {
     override document = GetSubscriptionsDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetUserDocument = gql`
+    query getUser($input: UserQueryInput!) {
+  getUsers(input: $input) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetUserGQL extends Apollo.Query<GetUserQuery, GetUserQueryVariables> {
+    override document = GetUserDocument;
 
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -1387,6 +1447,24 @@ export const GetUserSubscriptionDocument = gql`
   })
   export class GetUserSubscriptionGQL extends Apollo.Query<GetUserSubscriptionQuery, GetUserSubscriptionQueryVariables> {
     override document = GetUserSubscriptionDocument;
+
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateUserSubscriptionDocument = gql`
+    mutation updateUserSubscription($input: UserSubscriptionActionUpdate!) {
+  updateUserSubscription(input: $input) {
+    ...UserSubscriptionFragment
+  }
+}
+    ${UserSubscriptionFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateUserSubscriptionGQL extends Apollo.Mutation<UpdateUserSubscriptionMutation, UpdateUserSubscriptionMutationVariables> {
+    override document = UpdateUserSubscriptionDocument;
 
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

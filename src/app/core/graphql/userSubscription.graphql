@@ -12,7 +12,7 @@ fragment UserSubscriptionFragment on UserSubscription{
   state
   transaction{
     ...TransactionFragment
-    
+
   }
   createdAt
 }
@@ -31,6 +31,12 @@ query getUsersSubscription($input: UserSubscriptionConditions!){
 
 query getUserSubscription($id: String!) {
   getUserSubscription(id: $id) {
+    ...UserSubscriptionFragment
+  }
+}
+
+mutation updateUserSubscription($input: UserSubscriptionActionUpdate!) {
+  updateUserSubscription(input: $input){
     ...UserSubscriptionFragment
   }
 }

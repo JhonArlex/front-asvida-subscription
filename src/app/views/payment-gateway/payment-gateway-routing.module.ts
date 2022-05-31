@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: '',
     component: PaymentGatewayComponent
+  },
+  {
+    path: ':idUser/:idSubscription',
+    component: PaymentGatewayComponent
   }
 ];
 
