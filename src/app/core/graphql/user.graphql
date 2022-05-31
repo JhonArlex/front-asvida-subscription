@@ -18,6 +18,12 @@ fragment UserFragment on User{
   typeDni
 }
 
+query getUser($input: UserQueryInput!) {
+  getUsers(input: $input){
+    ...UserFragment
+  }
+}
+
 mutation createUser($input: UserAction!) {
   createUser(input: $input){
     ...UserFragment

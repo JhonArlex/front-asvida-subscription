@@ -1,230 +1,385 @@
 <app-index-navbar></app-index-navbar>
 <main>
-    <div class="w-full max-w-screen-xl mx-auto px-9 pt-16">
-        <h1 class="font-bold text-3xl my-4">Sistema de suscripciones Help Servi</h1>
-        <p>En en siguiente formulario, usted podra suscribirse a uno de los planes que mas se ajustes a sus necesidades
-        </p>
+  <div class="w-full max-w-screen-xl mx-auto px-9 pt-16">
+    <h1 class="font-bold text-3xl my-4">Sistema de suscripciones Help Servi</h1>
+    <p>
+      En en siguiente formulario, usted podra suscribirse a uno de los planes
+      que mas se ajustes a sus necesidades
+    </p>
 
-        <p class="mt-4">Lista de suscripciones</p>
+    <p class="mt-4">Lista de suscripciones</p>
 
-        <div class="w-full">
-            <div class="flex justify-center flex-wrap">
-                <ng-container *ngFor="let subscription of subscriptions">
-                    <app-subscription-item
-                        [selected]="subscriptionSelected ? subscription.id == subscriptionSelected.id: false"
-                        [subscription]="subscription" (checked)="selectSubscription($event)"></app-subscription-item>
-                </ng-container>
-            </div>
-        </div>
-
-        <div
-            class="mt-4 relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-            <div class="rounded-t bg-white mb-0 px-6 py-6">
-                <div class="text-center flex justify-around">
-                    <h6 class="text-blueGray-700 text-xl font-bold">Formulario de datos</h6>
-                </div>
-            </div>
-            <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                    Información del cliente
-                </h6>
-                <form [formGroup]="formSubscription">
-                    <div class="flex flex-wrap">
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Nombres y apellidos
-                                </label>
-                                <input type="text" formControlName="name" id="name"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Correo electrónico
-                                </label>
-                                <input type="email" formControlName="email" id="email"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Celular
-                                </label>
-                                <input type="text" formControlName="phone" id="phone"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Telefono
-                                </label>
-                                <input type="text" id="tel" formControlName="tel"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative flex justify-between w-full mb-3">
-                                <div class="w-1/4">
-                                    <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                        htmlFor="grid-password">
-                                        Tipo
-                                    </label>
-                                    <select formControlName="typeIdentifier" id="typeIdentifier">
-                                        <option value="CC">CC</option>
-                                        <option value="NIT">NIT</option>
-                                    </select>
-                                </div>
-                                <div class="w-3/4">
-                                    <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                        htmlFor="grid-password">
-                                        Identificación
-                                    </label>
-                                    <input type="text" formControlName="identifier" id="identifier"
-                                        class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Lugar expedición
-                                </label>
-                                <input type="text" formControlName="expeditionPlace" id="expeditionPlace"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Tipo de vivienda
-                                </label>
-                                <input type="radio" name="typeLivingPlace" formControlName="typeLivingPlace" value="Propia" id="propia">
-                                Propia
-                                <input type="radio" name="typeLivingPlace" formControlName="typeLivingPlace" id="alquilada"
-                                    value="Alquilada"> Alquilada
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Estrato
-                                </label>
-                                <input type="text" formControlName="stratum" id="stratum"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Dirección
-                                </label>
-                                <input type="text" formControlName="address" id="address"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Barrio
-                                </label>
-                                <input type="text" formControlName="neighborhood" id="neighborhood"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-6/12 px-4">
-                            <div class="relative w-full mb-3">
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                                    htmlFor="grid-password">
-                                    Ciudad
-                                </label>
-                                <input type="text" formControlName="city" id="city"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-                    <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-                        Autorizaciones
-                    </h6>
-                    <div class="flex flex-wrap">
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3 flex items-center">
-                                <input type="checkbox" formControlName="authorizationFacture"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
-                                    htmlFor="grid-password">
-                                    Autorizo al Grupo As Vida para que cargue y facture el valor correspondiente de
-                                    asistencia a
-                                    través del medio de pago seleccionado.
-                                </label>
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3 flex items-center">
-                                <input type="checkbox" formControlName="authorizationHabeasData"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
-                                    htmlFor="grid-password">
-                                    Conozco y acepto la política de tratamiento de datos personales.
-                                </label>
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3 flex items-center">
-                                <input type="checkbox" formControlName="authorizationAssistService"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
-                                    htmlFor="grid-password">
-                                    Acepto el contrato de prestación de servicios de asistencia el cual declaro haber
-                                    leído y
-                                    encontrarme de acuerdo con su contenido y declaraciones.
-                                </label>
-                            </div>
-                        </div>
-                        <div class="w-full lg:w-12/12 px-4">
-                            <div class="relative w-full mb-3 flex items-center">
-                                <input type="checkbox" formControlName="authorizationContractService"
-                                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150" />
-                                <label class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
-                                    htmlFor="grid-password">
-                                    Acepto el contrato de vinculación a los servicios de asistencia.
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-                    <button id="pay" [disabled]="!formSubscription.valid" (click)="saveUser()" class="bg-red-500 text-white mt-4 active:bg-red-600 disabled:opacity-75 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                        Ir a pasarela de pagos
-                    </button>
-
-                </form>
-            </div>
-        </div>
-
+    <div class="w-full">
+      <div class="flex justify-center flex-wrap">
+        <ng-container *ngFor="let subscription of subscriptions">
+          <app-subscription-item
+            [selected]="
+              subscriptionSelected
+                ? subscription.id == subscriptionSelected.id
+                : false
+            "
+            [subscription]="subscription"
+            (checked)="selectSubscription($event)"
+          ></app-subscription-item>
+        </ng-container>
+      </div>
     </div>
 
+    <div
+      class="mt-4 relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0"
+    >
+      <div class="rounded-t bg-white mb-0 px-6 py-6">
+        <div class="text-center flex justify-around">
+          <h6 class="text-blueGray-700 text-xl font-bold">
+            Formulario de datos
+          </h6>
+        </div>
+      </div>
+      <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+          Información del cliente
+        </h6>
+        <form [formGroup]="formSubscription">
+          <div class="flex flex-wrap">
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Nombres y apellidos
+                </label>
+                <input
+                  type="text"
+                  formControlName="name"
+                  id="name"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Correo electrónico
+                </label>
+                <input
+                  type="email"
+                  formControlName="email"
+                  id="email"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Celular
+                </label>
+                <input
+                  type="text"
+                  formControlName="phone"
+                  id="phone"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
 
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Telefono
+                </label>
+                <input
+                  type="text"
+                  id="tel"
+                  formControlName="tel"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative flex justify-between w-full mb-3">
+                <div class="w-1/4">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Tipo
+                  </label>
+                  <select formControlName="typeIdentifier" id="typeIdentifier">
+                    <option value="CC">CC</option>
+                    <option value="NIT">NIT</option>
+                  </select>
+                </div>
+                <div class="w-3/4">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Identificación
+                  </label>
+                  <input
+                    type="text"
+                    formControlName="identifier"
+                    id="identifier"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Lugar expedición
+                </label>
+                <input
+                  type="text"
+                  formControlName="expeditionPlace"
+                  id="expeditionPlace"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Tipo de vivienda
+                </label>
+                <input
+                  type="radio"
+                  name="typeLivingPlace"
+                  formControlName="typeLivingPlace"
+                  value="Propia"
+                  id="propia"
+                />
+                Propia
+                <input
+                  type="radio"
+                  name="typeLivingPlace"
+                  formControlName="typeLivingPlace"
+                  id="alquilada"
+                  value="Alquilada"
+                />
+                Alquilada
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Tipo inmueble
+                </label>
+                <input
+                  type="radio"
+                  name="typeFurniture"
+                  formControlName="typeFurniture"
+                  value="Casa"
+                  id="casa"
+                />
+                Casa
+                <input
+                  type="radio"
+                  name="typeFurniture"
+                  formControlName="typeFurniture"
+                  id="apartamento"
+                  value="Apartamento"
+                />
+                Apartamento
+                <input
+                  type="radio"
+                  name="typeFurniture"
+                  formControlName="typeFurniture"
+                  id="local"
+                  value="Local"
+                />
+                Local
+                <input
+                  type="radio"
+                  name="typeFurniture"
+                  formControlName="typeFurniture"
+                  id="edificio"
+                  value="Edificio"
+                />
+                Edificio
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Estrato
+                </label>
+                <input
+                  type="text"
+                  formControlName="stratum"
+                  id="stratum"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Dirección
+                </label>
+                <input
+                  type="text"
+                  formControlName="address"
+                  id="address"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Barrio
+                </label>
+                <input
+                  type="text"
+                  formControlName="neighborhood"
+                  id="neighborhood"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                >
+                  Ciudad
+                </label>
+                <input
+                  type="text"
+                  formControlName="city"
+                  id="city"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                />
+              </div>
+            </div>
+          </div>
+
+          <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+          <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+            Autorizaciones
+          </h6>
+          <div class="flex flex-wrap">
+            <div class="w-full lg:w-12/12 px-4">
+              <div class="relative w-full mb-3 flex items-center">
+                <input
+                  type="checkbox"
+                  formControlName="authorizationFacture"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                />
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
+                  htmlFor="grid-password"
+                >
+                  Autorizo al Grupo As Vida para que cargue y facture el valor
+                  correspondiente de asistencia a través del medio de pago
+                  seleccionado.
+                </label>
+              </div>
+            </div>
+            <div class="w-full lg:w-12/12 px-4">
+              <div class="relative w-full mb-3 flex items-center">
+                <input
+                  type="checkbox"
+                  formControlName="authorizationHabeasData"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                />
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
+                  htmlFor="grid-password"
+                >
+                  <a
+                    target="_blank"
+                    href="http://grupoasvida.com/wp-content/uploads/2022/05/Contrato-Términos-y-Condiciones.pdf"
+                    >Conozco y acepto la política de tratamiento de datos
+                    personales.</a
+                  >
+                </label>
+              </div>
+            </div>
+            <div class="w-full lg:w-12/12 px-4">
+              <div class="relative w-full mb-3 flex items-center">
+                <input
+                  type="checkbox"
+                  formControlName="authorizationAssistService"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                />
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
+                  htmlFor="grid-password"
+                >
+                  Acepto el contrato de prestación de servicios de asistencia el
+                  cual declaro haber leído y encontrarme de acuerdo con su
+                  contenido y declaraciones.
+                </label>
+              </div>
+            </div>
+            <div class="w-full lg:w-12/12 px-4">
+              <div class="relative w-full mb-3 flex items-center">
+                <input
+                  type="checkbox"
+                  formControlName="authorizationContractService"
+                  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                />
+                <label
+                  class="block uppercase text-blueGray-600 text-xs font-bold ml-4"
+                  htmlFor="grid-password"
+                >
+                  Acepto el contrato de vinculación a los servicios de
+                  asistencia.
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <hr class="mt-6 border-b-1 border-blueGray-300" />
+
+          <button
+            id="pay"
+            [disabled]="!formSubscription.valid"
+            (click)="saveUser()"
+            class="bg-red-500 text-white mt-4 active:bg-red-600 disabled:opacity-75 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            type="button"
+          >
+            Ir a pasarela de pagos
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 </main>

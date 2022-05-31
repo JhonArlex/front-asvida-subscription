@@ -3,7 +3,7 @@
         <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
             <div class="rounded-t mb-0 px-4 py-3 border-0">
                 <div class="flex flex-wrap items-center">
-                    <div class="relative w-full px-4 max-w-full flex align-middle">
+                    <div class="relative w-full px-4 max-w-full flex align-middle ">
                         <button (click)="goBack()"
                             class="bg-red-500 text-white active:bg-red-600 text-lg font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             type="button">
@@ -12,6 +12,11 @@
                         <h1 class="font-semibold text-lg bg-white ml-2">
                             Información detallada
                         </h1>
+                        <button (click)="cancelSubscription()"
+                            class="bg-red-500 text-white active:bg-red-600 text-lg font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button">
+                            Cancelar subscripción
+                        </button>
                     </div>
                 </div>
             </div>

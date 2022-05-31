@@ -14,6 +14,7 @@ describe('Pago con tarjeta de credito', () => {
     cy.get('#stratum').type('3');
     cy.get('#address').type('Av. Lima 123');
     cy.get('#neighborhood').type('San Isidro');
+    cy.get("#casa").check();
     cy.get('#city').type('Lima');
     cy.get('[type="checkbox"]').check();
     cy.get('#pay').click();
