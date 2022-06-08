@@ -7,12 +7,19 @@
     <div
       class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start"
     >
+      <button
+        (click)="goToWebPage()"
+        class="text-red-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button"
+      >
+        <i class="fas fa-angle-left text-xl"></i>
+      </button>
       <a
         [routerLink]="['/']"
         class="text-blueGray-700 text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
         href="#pablo"
       >
-        Grupo As Vida <span class="ring-offset-gray-500">0.4.0</span>
+        Grupo As Vida <span class="ring-offset-gray-500">{{version}}</span>
       </a>
       <button
         class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
@@ -29,7 +36,8 @@
     >
       <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
         <li class="flex items-center">
-          <button (click)="goToLogin()"
+          <button
+            (click)="goToLogin()"
             class="bg-red-600 text-white active:bg-red-700 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
             type="button"
           >

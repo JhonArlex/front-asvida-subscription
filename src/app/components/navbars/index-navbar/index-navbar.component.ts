@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import packageInfo from './../../../../../package.json';
 
 @Component({
   selector: "app-index-navbar",
@@ -7,6 +8,7 @@ import { Router } from "@angular/router";
 })
 export class IndexNavbarComponent implements OnInit {
   navbarOpen = false;
+  public version: string = packageInfo.version;
 
   constructor(
     private router: Router
@@ -20,5 +22,9 @@ export class IndexNavbarComponent implements OnInit {
 
   goToLogin() {
     this.router.navigate(["/auth/login"]);
+  }
+
+  goToWebPage() {
+    window.location.href = "http://grupoasvida.com/";
   }
 }

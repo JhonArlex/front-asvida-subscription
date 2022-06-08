@@ -34,7 +34,7 @@ export class CouponsComponent implements OnInit {
   }
 
   async getCoupons() {
-    const data = await lastValueFrom(this.getCouponsGQL.fetch({input: {}}));
+    const data = await lastValueFrom(this.getCouponsGQL.fetch({input: {}}, {fetchPolicy: 'network-only'}));
     this.coupons = data.data.getCoupons as Coupon[];
   }
 
