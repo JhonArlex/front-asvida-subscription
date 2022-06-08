@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxLoadingService } from 'ngx-loading';
 import { lastValueFrom } from 'rxjs';
-import { CreateCouponGQL, UpdateCouponGQL } from 'src/app/core/graphql/graphq';
+import { CreateCouponGQL, GetCouponsGQL, UpdateCouponGQL } from 'src/app/core/graphql/graphq';
 import { CouponService } from 'src/app/core/services/coupon.service';
 
 @Component({
@@ -57,7 +57,7 @@ export class CouponComponent implements OnInit {
   async createCoupon() {
     this.loading = true;
     const value = this.formCoupon.value;
-    const data = await lastValueFrom(this.createCouponGQL.mutate({
+    lastValueFrom(this.createCouponGQL.mutate({
       input: {
         name: value.name,
         code: value.code,
@@ -66,15 +66,21 @@ export class CouponComponent implements OnInit {
         dueDate: value.dueDate,
         state: value.state
       }
-    }));
-    this.loading = false;
-    this.goBack();
+    })).then(() => {
+      this.goBack();
+    })
+    .catch(err => {
+      alert('Código de descuento ya existe');
+    })
+    .finally(() => {
+      this.loading = false;
+    });
   }
 
   async updateCoupon() {
     this.loading = true;
     const value = this.formCoupon.value;
-    const data = await lastValueFrom(this.updateCouponGQL.mutate({
+    await lastValueFrom(this.updateCouponGQL.mutate({
       input: {
         id: this.couponService.coupon.id,
         data: {
@@ -86,9 +92,15 @@ export class CouponComponent implements OnInit {
           state: value.state
         }
       }
-    }));
-    this.loading = false;
-    this.goBack();
+    })).then(() => {
+      this.goBack();
+    })
+    .catch(err => {
+      alert('Código de descuento ya existe');
+    })
+    .finally(() => {
+      this.loading = false;
+    });
   }
 
 }

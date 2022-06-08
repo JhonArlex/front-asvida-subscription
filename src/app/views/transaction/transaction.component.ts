@@ -80,4 +80,8 @@ export class TransactionComponent implements OnInit {
     this.router.navigate(['/payment-gateway']);
   }
 
+  goToWebPage() {
+    window.location.href = "http://grupoasvida.com/";
+  }
+
 }

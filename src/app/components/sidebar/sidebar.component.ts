@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import packageInfo from '../../../../package.json';
 
 @Component({
   selector: "app-sidebar",
@@ -6,6 +7,7 @@ import { Component, OnInit } from "@angular/core";
 })
 export class SidebarComponent implements OnInit {
   collapseShow = "hidden";
+  public version: string = packageInfo.version;
   constructor() {}
 
   ngOnInit() {}
