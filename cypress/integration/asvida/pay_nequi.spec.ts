@@ -11,10 +11,12 @@ describe('Pago de nequi', () => {
     cy.get('#identifier').type('1112482910');
     cy.get('#expeditionPlace').type('Lima');
     cy.get('#propia').check();
+    cy.get('#casa').check();
     cy.get('#stratum').type('3');
     cy.get('#address').type('Av. Lima 123');
     cy.get('#neighborhood').type('San Isidro');
     cy.get('#city').type('Lima');
+    cy.get('#refer').type('Jhon Referido');
     cy.get('[type="checkbox"]').check();
   });
 

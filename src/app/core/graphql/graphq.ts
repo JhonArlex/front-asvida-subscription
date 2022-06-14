@@ -531,6 +531,7 @@ export type User = {
   id: Scalars['String'];
   name: Scalars['String'];
   phone: Array<Scalars['String']>;
+  refer?: Maybe<Scalars['String']>;
   refresh_token?: Maybe<Scalars['String']>;
   role: Array<Role>;
   stratum?: Maybe<Scalars['String']>;
@@ -557,6 +558,7 @@ export type UserAction = {
   password?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   profilePicture?: InputMaybe<Scalars['String']>;
+  refer?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<Array<Scalars['String']>>;
   stratum?: InputMaybe<Scalars['String']>;
   typeDni?: InputMaybe<Scalars['String']>;
