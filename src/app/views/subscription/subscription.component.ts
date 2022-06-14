@@ -71,6 +71,7 @@ export class SubscriptionComponent implements OnInit {
       phone: ['', Validators.required],
       tel: ['', Validators.required],
       typeFurniture: ['', Validators.required],
+      refer: [''],
       authorizationFacture: [null, Validators.required],
       authorizationHabeasData: [null, Validators.required],
       authorizationAssistService: [null, Validators.required],
@@ -119,6 +120,7 @@ export class SubscriptionComponent implements OnInit {
     authorizationAssistService: any;
     authorizationContractService: any;
     typeFurniture: any;
+    refer: string;
   }) {
     this.createUserGql
       .mutate({
@@ -140,6 +142,7 @@ export class SubscriptionComponent implements OnInit {
           authorizationContractService: user.authorizationContractService,
           dateSignature: new Date(),
           typeFurniture: user.typeFurniture,
+          refer: user.refer,
           role: ['621bbf90fbd65b0aac28b6c7'],
         },
       })
