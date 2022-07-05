@@ -275,6 +275,10 @@ export class PaymentGatewayComponent implements OnInit {
       this.loading = true;
       const value = this.formCard.value;
       const dateExpiration = value.cardExpiration.split('/');
+      let year = dateExpiration[1].replace(' ', '');
+      if (year.length > 2) {
+        year = year.substr(2, 2);
+      }
       lastValueFrom(
         this.payCardGql.mutate({
           input: {
@@ -288,7 +292,7 @@ export class PaymentGatewayComponent implements OnInit {
             card_holder: value.cardName,
             cvc: value.cardCvv.toString(),
             exp_month: dateExpiration[0].replace(' ', ''),
-            exp_year: dateExpiration[1].replace(' ', '').substr(2, 2),
+            exp_year: year,
             fee: '1',
             period: this.subscriptionService.subscription.time,
             subscription: this.subscriptionService.subscription.id,
